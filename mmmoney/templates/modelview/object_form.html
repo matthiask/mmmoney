@@ -1,0 +1,32 @@
+{% extends base_template|default:"base.html" %}
+
+{% load i18n towel_form_tags %}
+
+{% block title %}{{ title }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<form method="post" action="." enctype="multipart/form-data">{% csrf_token %}
+
+{% for formset in formsets.values %}{{ formset.management_form }}{% endfor %}
+
+{% form_errors form formsets %}
+
+<table>
+    {% for field in form %}{% form_item field %}{% endfor %}
+
+    {% for key, formset in formsets.items %}
+        {% for form in formset.forms %}
+            {% for field in form %}{% form_item field %}{% endfor %}
+        {% endfor %}
+    {% endfor %}
+</table>
+
+<div class="buttons">
+    <button type="submit">{% trans "save"|capfirst %}</button>
+    <a href="../" class="button"><span>{% trans "cancel"|capfirst %}</span></a>
+</div>
+
+</form>
+{% endblock %}

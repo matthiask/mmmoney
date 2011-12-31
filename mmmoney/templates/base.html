@@ -1,158 +1,116 @@
-{% load i18n %}{% spaceless %}<!DOCTYPE html>
+{% load i18n %}<!DOCTYPE html>
 <html>
 <head>
 <title>{% block title %}mmmoney{% endblock %}</title>
-<link rel="shortcut icon" href="{{ STATIC_URL }}metronom/favicon.ico">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-<script type="text/javascript">
-/*
- * jQuery hashchange event - v1.3 - 7/21/2010
- * http://benalman.com/projects/jquery-hashchange-plugin/
- *
- * Copyright (c) 2010 "Cowboy" Ben Alman
- * Dual licensed under the MIT and GPL licenses.
- * http://benalman.com/about/license/
- */
-(function($,e,b){var c="hashchange",h=document,f,g=$.event.special,i=h.documentMode,d="on"+c in e&&(i===b||i>7);function a(j){j=j||location.href;return"#"+j.replace(/^[^#]*#?(.*)$/,"$1")}$.fn[c]=function(j){return j?this.bind(c,j):this.trigger(c)};$.fn[c].delay=50;g[c]=$.extend(g[c],{setup:function(){if(d){return false}$(f.start)},teardown:function(){if(d){return false}$(f.stop)}});f=(function(){var j={},p,m=a(),k=function(q){return q},l=k,o=k;j.start=function(){p||n()};j.stop=function(){p&&clearTimeout(p);p=b};function n(){var r=a(),q=o(m);if(r!==m){l(m=r,q);$(e).trigger(c)}else{if(q!==m){location.href=location.href.replace(/#.*/,"")+q}}p=setTimeout(n,$.fn[c].delay)}$.browser.msie&&!d&&(function(){var q,r;j.start=function(){if(!q){r=$.fn[c].src;r=r&&r+a();q=$('<iframe tabindex="-1" title="empty"/>').hide().one("load",function(){r||l(a());n()}).attr("src",r||"javascript:0").insertAfter("body")[0].contentWindow;h.onpropertychange=function(){try{if(event.propertyName==="title"){q.document.title=h.title}}catch(s){}}}};j.stop=k;o=function(){return a(q.location.href)};l=function(v,s){var u=q.document,t=$.fn[c].domain;if(v!==s){u.title=h.title;u.open();t&&u.write('<script>document.domain="'+t+'"<\/script>');u.close();q.location.hash=v}}})();return j})()})(jQuery,this);
-
-var M2 = {
-base: window.location.href.replace(/[\#\?].*/, ''),
-
-init: function() {
-    $('a').live('click', function() {
-        if (this.href.indexOf(M2.base) == 0 && this.className.indexOf('except') == -1) {
-            window.location.hash = this.href.replace(M2.base, '');
-            return false;
-        }
-    });
-
-    var $window = $(window).bind('hashchange', function() {
-        var url = window.location.hash.substr(1);
-
-        $('#tabs>a').removeClass('current').filter('[href*=' + url.replace(/\/.*/, '') + ']').addClass('current');
-        M2.fetch_content(url);
-    });
-
-    var $s = $('#spinner');
-    $('body').ajaxStart(function() {
-        $s.show();
-        setTimeout(function() { $s.hide(); }, 3000);
-    }).ajaxStop(function() {
-        $s.hide();
-    });
-
-    if (window.location.hash)
-        $window.trigger('hashchange');
-    else
-        window.location.hash = 'home/';
-},
-
-fetch_content: function(url) {
-    if (M2.Cache.has(window.location.hash))
-        return M2.set_content(M2.Cache.get(window.location.hash), 'try_cache');
-
-    $.get(url, function(data) { M2.set_content(data, 'do_cache'); });
-},
-
-set_content: function(content, noflush) {
-    if (noflush == 'do_cache')
-        M2.Cache.set(window.location.hash, content);
-    else if (!noflush)
-        M2.Cache.clear();
-
-    $('#content').empty().hide().append(content).fadeIn('fast', function() {
-        if (window.scrollTo)
-            window.scrollTo(0, 0);
-    });
-    M2.init_content();
-},
-
-init_content: function() {
-    if (window.navigator.userAgent.indexOf('Android') != -1) {
-        var $cbs = $('input[type=checkbox]');
-
-        if ($cbs.length) {
-            $cbs.css({
-                webkitTransform: 'scale(2)',
-                webkitTransformOrigin: '20% 50%',
-                margin: '0 5px 10px 0'
-            }).after(' &nbsp;');
-        }
-    }
-
-    var $forms = $('form').not('.exclude');
-
-    $forms.filter('[method=post]').submit(function() {
-        $.post(this.getAttribute('action'), $(this).serialize(), M2.post_handler);
-        return false;
-    });
-    $forms.filter('[method=get]').submit(function() {
-        window.location.hash = this.action.replace(M2.base, '') + $(this).serialize();
-        return false;
-    });
-},
-
-post_handler: function(data) {
-    M2.set_content(data);
-},
-
-Cache: {
-    _CACHE: {},
-    has: function(key) { return typeof(M2.Cache._CACHE[key]) != 'undefined'; },
-    set: function(key, value) { M2.Cache._CACHE[key] = value; },
-    get: function(key) { return M2.Cache._CACHE[key]; },
-    clear: function(url) {
-        if (url)
-            delete M2.Cache._CACHE[url];
-        else
-            M2.Cache._CACHE = {};
-    }
-}
-};
-
-//$(M2.init);
-</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 <style type="text/css">
-html, body { padding: 0; margin: 0; font-family: Helvetica, Arial, sans-serif;
-    font-size: 12px; line-height: 150%; }
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
 
-#topbar {
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+/* clearfix */
+/* For modern browsers */
+.cf:before,
+.cf:after { content:""; display:table; }
+.cf:after { clear:both; }
+
+/* For IE 6/7 (trigger hasLayout) */
+.cf { zoom:1; }
+
+
+
+html, body {
+    font-family: Helvetica, Arial, sans-serif; font-size: 12px; line-height: 1.5; }
+
+h1, h1 a { font-weight: bold; font-size: 22px; color: #3b3b3b; }
+h2, h2 a { font-weight: bold; font-size: 18px; color: #3b3b3b; }
+h3, h3 a { font-weight: bold; font-size: 14px; color: #3b3b3b; }
+
+h1 {
+    border-bottom: 3px solid #3b3b3b; line-height: 1.2;
+    padding: 2px 5px; }
+
+#tabs {
     background: #2c2c2c;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3B3B3B), to(#2C2C2C));
-    color: #e0e0e0; padding: 3px 0 3px 5px; font-size: 140%; font-weight: bold;
+    color: #e0e0e0; padding: 5px 5px 3px 5px; font-size: 140%; font-weight: bold;
     margin-bottom: 5px; }
-h1 { color: #444; font-size: 140%; padding: 0; margin: 0; }
 
 #tabs a {
-    display: block; padding: 9px 10px; margin-left: 5px; background: #e4e4e4;
-    color: #444; text-decoration: none; min-width: 40px; float: left;
-    -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px;
-    text-align: center; font-size: 130%; }
+    float: left;
+    display: inline-block; padding: 4px 0; margin-right: 15px;
+    color: #e4e4e4; text-decoration: none; float: left;
+    font-size: 130%; }
 #tabs a.current { background: #2c2c2c; color: #e4e4e4; }
-#menubar { clear: left; background: #2c2c2c; padding: 5px; }
+#tabs a.right { float: right; margin: 0 0 0 15px; }
 
-#content { clear: both; }
-h2, h3 { background: #c7e76c; clear: both; margin: 10px 0 3px 0; padding: 5px; font-size: 130%; }
-h2:first-child { margin-top: 3px; }
-h3 { background: #6DC7E8; font-size: 120%; }
 a.object {
-    -webkit-border-radius: 5px; display: block; border: 1px solid #e4e4e4;
-    margin: 3px; padding: 4px 4px 6px 4px; text-decoration: none; color: #000;
-    -moz-border-radius: 5px; }
+    display: block; margin: 0 3px; padding: 4px 4px 6px 4px;
+    text-decoration: none; color: #000;
+    }
 a.object:active { background: #c7e76c; }
 a.object strong { color: #444; font-size: 120%; padding: 0; margin: 3px 0; display: block; }
-.even { background: #e4e4e4; }
+a.object:nth-child(2n+1) { background: #e4e4e4; }
 
 table { width: 100%; }
-table th, table td { padding: 3px 5px; vertical-align: top; }
-th { text-align: right; }
-p, div.update { margin: 3px 5px 7px 5px; }
+table th, table td { padding: 3px 5px; vertical-align: top; text-align: left; }
+form div.list,
+p { margin: 3px 5px 7px 5px; }
 p a { line-height: 200%; margin: 3px 0; }
 form ul, form li { list-style: none; padding: 0; margin: 0; }
 form ul, form li { display: block; margin-right: 3px; }
-form label { font-size: 120%; }
+form label { font-size: 95%; color: #444444; font-weight: bold; }
+form li label,
+form .required li label { font-weight: normal; font-size: inherit; line-height: 1.5; }
+form .help { color: #666; font-weight: normal; }
+.hidelabel label { display: none; }
 
 input[type=text], input[type=password], select, textarea {
     box-sizing: border-box; -webkit-box-sizing: border-box;
@@ -165,52 +123,69 @@ input[type=text], input[type=password], select, textarea {
 textarea { height: 100px; }
 input[type=radio], input[type=checkbox] {
     margin: 5px 7px 2px 0; height: 25px; width: 25px; }
+.invalid label { color: #e12a24; }
+.invalid li label { color: inherit; }
 .invalid input[type=text], .invalid textarea, .invalid select {
-    border-color: #e53331;
-    -webkit-box-shadow: 2px 2px 4px #e53331 inset;
-    box-shadow: 2px 2px 4px #e53331 inset; }
+    border-color: #e12a24;
+    -webkit-box-shadow: 2px 2px 4px #eec6c6 inset;
+    box-shadow: 2px 2px 4px #eec6c6 inset; }
+a.button,
 button {
-    display: block; padding: 12px 15px; margin: 5px 0 5px 5px; text-align: center;
-    font-size: 120%; font-weight: bold; color: #000; background: #2c2c2c;
-    border: none; min-width: 100px; -webkit-border-radius: 5px;
-    -moz-border-radius: 5px; color: #e4e4e4; }
-.cf:before, .cf:after { content:""; display:table; }
-.cf:after { clear:both; }
-/* For IE 6/7 (trigger hasLayout) */
-.cf { zoom:1; }
-.cf button { float: left; }
+    display: inline-block; padding: 8px 8px 6px 8px; margin: 5px 0 5px 5px; text-align: center;
+    font-size: 14px; font-weight: bold; color: #000; background: #2c2c2c;
+    border: none; min-width: 90px; -webkit-border-radius: 5px;
+    -moz-border-radius: 5px; color: #e4e4e4;
+    text-decoration: none; line-height: 1.5; }
 
-#results h2 { background: none; font-size: 120%; margin: 0; padding-bottom: 2px; }
 
-/*
-blue #6DC7E8
-pink #E86DC7
-green #c7e76c
-*/
+.pagination {
+    margin: 10px 0; font-size: 14px;
+    border-top: 1px solid #d8d8d8; border-bottom: 3px solid #3b3b3b;
+    padding: 0 5px; }
+.pagination a {
+    display: inline-block; text-decoration: none; padding: 0 3px; margin: 0 1px;
+    color: #000000; }
+.pagination .index,
+.pagination .numbers { line-height: 30px; height: 30px; }
+.pagination .index { float: left; font-weight: bold; }
+.pagination .numbers { float: right; }
+.pagination .mark { font-weight: bold; color: #528eb0; }
 
-#spinner {
-    background: rgba(1, 1, 1, 0.1) url({{ STATIC_URL }}metronom/img/spinner.gif);
-    height: 64px; width: 64px; position: fixed;
-    left: 50%; top: 50%; margin: -32px 0 0 -32px;
-    display: none; -webkit-border-radius: 10px; -moz-border-radius: 10px; }
+/* MESSAGES */
+.messages li {
+    padding: 10px; margin: 0 0 8px 0; font-size: 14px;
+    font-weight: bold; background: #ecede8; }
+.messages small { display: block; font-weight: normal; font-size: 12px; }
+.messages li.error { background-color: #eec6c6; }
+.messages li.success { background-color: #e0e581; }
+
+
+form div.error {
+    background: #eec6c6; margin: 0 0 8px 0; padding: 10px; font-size: 12px; }
+form div.error strong { font-size: 14px; color: #000000; }
+form div.error ul { margin: 4px 0 0 0; padding: 0; list-style: none; }
+form div.error ul li span { display: block; width: 60px; float: left; clear: left;
+    font-weight: bold; }
+form div.error ul ul { margin: 0 0 1px 0; }
 
 </style>
 </head>
 <body>
-<div id="topbar">{{ APP_NAME }}</div>
 {% block body %}
-<div id="tabs">
-    <a href="home/">Home</a>
-    <a href="jobs/">Jobs</a>
-    <a href="tickets/">Tickets</a>
-    <a href="profile/">Profile</a>
-    <div id="menubar">
-        <h1></h1>
-    </div>
+<div id="tabs" class="cf">
+    <a href="/">{% trans "entries"|capfirst %}</a>
+    <a href="/add/">{% trans "add"|capfirst %}</a>
+    <a href="/stats/">{% trans "Stats" %}</a>
+    <a href="{% url logout %}" class="right">X&nbsp;</a>
 </div>
+<div id="content">
+{% for message in messages %}
+{% if forloop.first %}<ul class="messages">{% endif %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+{% if forloop.last %}</ul>{% endif %}
+{% endfor %}
 
-<div id="content">{% block content %}{% endblock %}</div>
+{% block content %}{% endblock %}</div>
 {% endblock %}
-<div id="spinner"></div>
 </body>
-</html>{% endspaceless %}
+</html>

@@ -48,3 +48,7 @@ class Entry(models.Model):
         ordering = ['-date', '-created']
         verbose_name = _('entry')
         verbose_name_plural = _('entries')
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('mmmoney_entry_edit', (), {'pk': self.pk})

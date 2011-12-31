@@ -1,0 +1,28 @@
+{% extends base_template %}
+
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans "Stats" %}</h1>
+
+<table>
+<thead>
+    <tr>
+        <th></th>
+        {% for user in thead %}
+            <th>{{ user.username }}</th>
+        {% endfor %}
+    </tr>
+</thead>
+<tbody>
+{% for month, month_data in tbody %}
+    <tr>
+        <th>{{ month }}</th>
+        {% for data in month_data %}
+            <td>{{ data|floatformat:".2f" }}</td>
+        {% endfor %}
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

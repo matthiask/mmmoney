@@ -1,0 +1,11 @@
+{% extends "modelview/object_list.html" %}
+
+{% block objects %}
+{% for object in object_list %}
+<a class="object" href="{{ object.get_absolute_url }}">
+    <strong>{{ object.paid_by.username }} {{ object.list }} {{ object.notes }}</strong>
+    {{ object.date|date:"d.m.Y" }}:
+    {{ object.currency }} {{ object.total|stringformat:".2f" }}
+</a>
+{% endfor %}
+{% endblock %}

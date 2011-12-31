@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% load i18n towel_form_tags %}
+
+{% block body %}
+<h1>{% trans "Logged out" %}</h1>
+
+<a class="button" href="{% url login %}">{% trans "Log in again" %}</a>
+{% endblock %}

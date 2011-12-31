@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% load i18n towel_form_tags %}
+
+{% block body %}
+<form action="{% url login %}" method="post">
+    <h1>{% trans "Login" %}</h1>
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.GET.next|default:"/" }}">
+    <fieldset>
+        {% for field in form %}{% form_item field %}{% endfor %}
+    </fieldset>
+    <div class="buttons cf">
+        <button type="submit">{% trans "Login" %}</button>
+    </div>
+</form>
+{% endblock %}
