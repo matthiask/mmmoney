@@ -29,7 +29,7 @@ class EntryForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EntryForm, self).__init__(*args, **kwargs)
         self.fields['paid_by'].choices = [(u.id, u.get_full_name() or u.username)
-            for u in User.objects.filter(is_active=True)]
+            for u in User.objects.filter(is_active=True).order_by('first_name', 'last_name')]
         self.fields['list'].choices = [(l.id, l.name)
             for l in List.objects.all()]
 
