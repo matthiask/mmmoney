@@ -1,0 +1,8 @@
+*.pyc
+*~
+.*.swp
+\#*#
+/secrets.py
+/local_settings.py
+/media
+/static
