@@ -26,6 +26,9 @@
 <div class="buttons">
     <button type="submit">{% trans "save"|capfirst %}</button>
     <a href="../" class="button"><span>{% trans "cancel"|capfirst %}</span></a>
+    {% if object %}
+    <a href="../delete/" class="button"><span>{% trans "delete"|capfirst %}</span></a>
+    {% endif %}
 </div>
 
 </form>

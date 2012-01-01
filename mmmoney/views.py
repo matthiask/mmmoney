@@ -66,6 +66,9 @@ class EntryModelView(modelview.ModelView):
         messages.success(request, _('The object has been successfully updated.'))
         return redirect('mmmoney_entry_list')
 
+    def deletion_allowed(self, request, instance):
+        return request.user == instance.paid_by
+
     def stats(self, request):
         # TODO handle currency, not necessary yet
         queryset = Entry.objects.order_by().values('paid_by', 'date').annotate(Sum('total'))
