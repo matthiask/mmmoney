@@ -85,7 +85,7 @@ class EntryModelView(modelview.ModelView):
             by_month.setdefault(user, 0)
             by_month[user] += row['total__sum']
 
-        users = list(users)
+        users = sorted(users, key=lambda user: (user.first_name, user.username))
         tbody = []
         for month, month_data in sorted(stats.items()):
             row = [month[2], [], 0]
