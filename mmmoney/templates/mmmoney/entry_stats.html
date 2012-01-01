@@ -17,7 +17,7 @@
 <tbody>
 {% for month, month_data, month_sum in tbody %}
     <tr>
-        <th>{{ month }}</th>
+        <th>{{ month|date:"F Y" }}</th>
         {% for data in month_data %}
             <td>{{ data|floatformat:".2f" }}</td>
         {% endfor %}

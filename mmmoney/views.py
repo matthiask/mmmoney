@@ -1,3 +1,5 @@
+from datetime import date
+
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -77,7 +79,7 @@ class EntryModelView(modelview.ModelView):
         user_dict = dict((u.id, u) for u in User.objects.all())
 
         for row in queryset:
-            month = (row['date'].year, row['date'].month, row['date'].strftime('%B %Y'))
+            month = row['date'].replace(day=1)
             by_month = stats.setdefault(month, {})
             user = user_dict[row['paid_by']]
             users.add(user)
@@ -88,7 +90,7 @@ class EntryModelView(modelview.ModelView):
         users = sorted(users, key=lambda user: (user.first_name, user.username))
         tbody = []
         for month, month_data in sorted(stats.items()):
-            row = [month[2], [], 0]
+            row = [month, [], 0]
             for user in users:
                 row[1].append(month_data.get(user, 0))
             row[2] = sum(row[1], 0)
