@@ -5,24 +5,33 @@
 {% block content %}
 <h1>{% trans "Stats" %}</h1>
 
-<table>
+<table id="stats">
 <thead>
     <tr>
         <th></th>
         {% for user in thead %}
-            <th>{{ user.username }}</th>
+            <th>{{ user.first_name|default:user.username }}</th>
         {% endfor %}
     </tr>
 </thead>
 <tbody>
-{% for month, month_data in tbody %}
+{% for month, month_data, month_sum in tbody %}
     <tr>
         <th>{{ month }}</th>
         {% for data in month_data %}
             <td>{{ data|floatformat:".2f" }}</td>
         {% endfor %}
+        <th>{{ month_sum|floatformat:".2f" }}</th>
     </tr>
 {% endfor %}
 </tbody>
+<tfoot>
+    <tr>
+        <th>{% trans "Total" %}</th>
+        {% for user_sum in tfoot %}
+            <td>{{ user_sum|floatformat:".2f" }}</td>
+        {% endfor %}
+    </tr>
+</tfoot>
 </table>
 {% endblock %}

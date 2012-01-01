@@ -85,16 +85,21 @@ class EntryModelView(modelview.ModelView):
         users = list(users)
         tbody = []
         for month, month_data in sorted(stats.items()):
-            row = (month[2], [])
+            row = [month[2], [], 0]
             for user in users:
                 row[1].append(month_data.get(user, 0))
+            row[2] = sum(row[1], 0)
             tbody.append(row)
+
+        tfoot = [sum(user) for user in zip(*[row[1] for row in tbody])]
+        tfoot.append(sum(tfoot, 0))
 
         return self.render(request,
             self.get_template(request, 'stats'),
             self.get_context(request, {
                 'thead': users,
-                'tbody': tbody
+                'tbody': tbody,
+                'tfoot': tfoot,
                 }))
 
 entry_views = EntryModelView(Entry)
