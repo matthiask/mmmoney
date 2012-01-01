@@ -1,0 +1,139 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-01-01 15:35+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: mmmoney/models.py:11
+msgid "name"
+msgstr "Name"
+
+#: mmmoney/models.py:12
+msgid "ordering"
+msgstr "Sortierung"
+
+#: mmmoney/models.py:16 mmmoney/models.py:38
+msgid "list"
+msgstr "Liste"
+
+#: mmmoney/models.py:17
+msgid "lists"
+msgstr "Listen"
+
+#: mmmoney/models.py:33
+msgid "created"
+msgstr "Erstellt"
+
+#: mmmoney/models.py:34
+msgid "date"
+msgstr "Datum"
+
+#: mmmoney/models.py:36
+msgid "paid by"
+msgstr "Bezahlt von"
+
+#: mmmoney/models.py:40
+msgid "currency"
+msgstr "Währung"
+
+#: mmmoney/models.py:42
+msgid "total"
+msgstr "Total"
+
+#: mmmoney/models.py:43
+msgid "notes"
+msgstr "Bemerkungen"
+
+#: mmmoney/models.py:49
+msgid "entry"
+msgstr "Eintrag"
+
+#: mmmoney/models.py:50 mmmoney/templates/base.html:176
+msgid "entries"
+msgstr "Einträge"
+
+#: mmmoney/views.py:62
+msgid "The new object has been successfully created."
+msgstr "Das neue Objekt wurde erfolgreich erstellt."
+
+#: mmmoney/views.py:66
+msgid "The object has been successfully updated."
+msgstr "Das Objekt wurde erfolgreich aktualisiert."
+
+#: mmmoney/templates/base.html:177
+msgid "add"
+msgstr "neu"
+
+#: mmmoney/templates/base.html:178
+#: mmmoney/templates/mmmoney/entry_stats.html:6
+msgid "Stats"
+msgstr "Stats"
+
+#: mmmoney/templates/modelview/object_delete_confirmation.html:11
+msgid "You are about to delete the following objects:"
+msgstr ""
+
+#: mmmoney/templates/modelview/object_delete_confirmation.html:21
+#: mmmoney/templates/modelview/object_detail.html:20
+msgid "delete"
+msgstr ""
+
+#: mmmoney/templates/modelview/object_delete_confirmation.html:23
+#: mmmoney/templates/modelview/object_form.html:28
+msgid "cancel"
+msgstr ""
+
+#: mmmoney/templates/modelview/object_detail.html:21
+msgid "edit"
+msgstr ""
+
+#: mmmoney/templates/modelview/object_form.html:27
+msgid "save"
+msgstr ""
+
+#: mmmoney/templates/modelview/object_list.html:19
+msgid "Search"
+msgstr "Suche"
+
+#: mmmoney/templates/modelview/object_list.html:21
+msgid "Reset"
+msgstr ""
+
+#: mmmoney/templates/modelview/object_list.html:35
+msgid "object"
+msgstr ""
+
+#: mmmoney/templates/modelview/object_list.html:54
+msgid "Batch form"
+msgstr ""
+
+#: mmmoney/templates/modelview/object_list.html:70
+msgid "Submit"
+msgstr ""
+
+#: mmmoney/templates/registration/logged_out.html:6
+msgid "Logged out"
+msgstr ""
+
+#: mmmoney/templates/registration/logged_out.html:8
+msgid "Log in again"
+msgstr ""
+
+#: mmmoney/templates/registration/login.html:7
+#: mmmoney/templates/registration/login.html:14
+msgid "Login"
+msgstr ""
