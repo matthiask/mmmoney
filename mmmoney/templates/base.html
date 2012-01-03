@@ -184,7 +184,7 @@ form div.error ul ul { margin: 0 0 1px 0; }
     <a href="/">{% trans "entries"|capfirst %}</a>
     <a href="/add/">{% trans "add"|capfirst %}</a>
     <a href="/stats/">{% trans "Stats" %}</a>
-    <a href="{% url logout %}" class="right">X&nbsp;</a>
+    <a href="{% url django.contrib.auth.views.logout %}" class="right">X&nbsp;</a>
 </div>
 <div id="content">
 {% for message in messages %}
