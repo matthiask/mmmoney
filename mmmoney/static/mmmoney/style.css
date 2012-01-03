@@ -1,0 +1,170 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+/* clearfix */
+/* For modern browsers */
+.cf:before,
+.cf:after { content:""; display:table; }
+.cf:after { clear:both; }
+
+/* For IE 6/7 (trigger hasLayout) */
+.cf { zoom:1; }
+
+
+
+html, body {
+    font-family: Helvetica, Arial, sans-serif; font-size: 12px; line-height: 1.5; }
+
+h1, h1 a { font-weight: bold; font-size: 22px; color: #3b3b3b; }
+h2, h2 a { font-weight: bold; font-size: 18px; color: #3b3b3b; }
+h3, h3 a { font-weight: bold; font-size: 14px; color: #3b3b3b; }
+
+h1 {
+    border-bottom: 3px solid #3b3b3b; line-height: 1.2;
+    padding: 2px 5px; }
+
+#tabs {
+    background: #2c2c2c;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3B3B3B), to(#2C2C2C));
+    color: #e0e0e0; padding: 5px 5px 3px 5px; font-size: 140%; font-weight: bold;
+    margin-bottom: 5px; }
+
+#tabs a {
+    float: left;
+    display: inline-block; padding: 4px 0; margin-right: 15px;
+    color: #e4e4e4; text-decoration: none; float: left;
+    font-size: 130%; }
+#tabs a.current { background: #2c2c2c; color: #e4e4e4; }
+#tabs a.right { float: right; margin: 0 0 0 15px; }
+
+a.object {
+    display: block; margin: 0 3px; padding: 4px 4px 6px 4px;
+    text-decoration: none; color: #000;
+    }
+a.object:active { background: #c7e76c; }
+a.object strong { color: #444; font-size: 120%; padding: 0; margin: 3px 0; display: block; }
+a.object:nth-child(2n+1) { background: #e4e4e4; }
+
+table { width: 100%; }
+table th, table td { padding: 3px 5px; vertical-align: top; text-align: left; }
+
+#stats th, #stats td { text-align: right; }
+#stats th:first-child { text-align: left; }
+#stats tbody {
+    border-top: 2px solid #3b3b3b; border-bottom: 2px solid #3b3b3b;
+    color: #3b3b3b; }
+#stats thead, #stats tfoot { font-weight: bold; }
+
+form div.list,
+p { margin: 3px 5px 7px 5px; }
+p a { line-height: 200%; margin: 3px 0; }
+form ul, form li { list-style: none; padding: 0; margin: 0; }
+form ul, form li { display: block; margin-right: 3px; }
+form label { font-size: 95%; color: #444444; font-weight: bold; }
+form li label,
+form .required li label { font-weight: normal; font-size: inherit; line-height: 1.5; }
+form .help { color: #666; font-weight: normal; }
+.hidelabel label { display: none; }
+
+input[type=text], input[type=password], select, textarea {
+    box-sizing: border-box; -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%; margin: 8px 3px 0 3px; padding: 6px 6px 6px 6px;
+    font-size: 16px; font-weight: normal; margin: 0; border: none;
+    height: 42px; background: none; border: 1px solid #a0a0a0;
+    -webkit-box-shadow: 2px 2px 4px #a0a0a0 inset;
+    box-shadow: 2px 2px 4px #a0a0a0 inset; border-radius: 5px; }
+textarea { height: 100px; }
+input[type=radio], input[type=checkbox] {
+    margin: 5px 7px 2px 0; height: 25px; width: 25px; }
+.invalid label { color: #e12a24; }
+.invalid li label { color: inherit; }
+.invalid input[type=text], .invalid textarea, .invalid select {
+    border-color: #e12a24;
+    -webkit-box-shadow: 2px 2px 4px #eec6c6 inset;
+    box-shadow: 2px 2px 4px #eec6c6 inset; }
+a.button,
+button {
+    display: inline-block; padding: 8px 8px 6px 8px; margin: 5px 0 5px 5px; text-align: center;
+    font-size: 14px; font-weight: bold; color: #000; background: #2c2c2c;
+    border: none; min-width: 90px; -webkit-border-radius: 5px;
+    -moz-border-radius: 5px; color: #e4e4e4;
+    text-decoration: none; line-height: 1.5; }
+
+
+.pagination {
+    margin: 10px 0; font-size: 14px;
+    border-top: 1px solid #d8d8d8; border-bottom: 3px solid #3b3b3b;
+    padding: 0 5px; }
+.pagination a {
+    display: inline-block; text-decoration: none; padding: 0 3px; margin: 0 1px;
+    color: #000000; }
+.pagination .index,
+.pagination .numbers { line-height: 30px; height: 30px; }
+.pagination .index { float: left; font-weight: bold; }
+.pagination .numbers { float: right; }
+.pagination .mark { font-weight: bold; color: #528eb0; }
+
+/* MESSAGES */
+.messages li {
+    padding: 10px; margin: 0 0 8px 0; font-size: 14px;
+    font-weight: bold; background: #ecede8; }
+.messages small { display: block; font-weight: normal; font-size: 12px; }
+.messages li.error { background-color: #eec6c6; }
+.messages li.success { background-color: #e0e581; }
+
+
+form div.error {
+    background: #eec6c6; margin: 0 0 8px 0; padding: 10px; font-size: 12px; }
+form div.error strong { font-size: 14px; color: #000000; }
+form div.error ul { margin: 4px 0 0 0; padding: 0; list-style: none; }
+form div.error ul li span { display: block; width: 60px; float: left; clear: left;
+    font-weight: bold; }
+form div.error ul ul { margin: 0 0 1px 0; }
