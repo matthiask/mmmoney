@@ -99,6 +99,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'mmmoney',
     'towel',
+    'south',
 )
 
 # A sample logging configuration. The only tangible logging
