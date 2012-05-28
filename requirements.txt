@@ -1,3 +1,4 @@
 Django>=1.4
 psycopg2>=2.4
+gunicorn==0.14.2
 -e git://github.com/matthiask/towel.git#egg=towel
