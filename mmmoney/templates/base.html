@@ -1,26 +1,32 @@
-{% spaceless %}{% load i18n %}<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+{% load i18n staticfiles %}
+{% load url from future %}
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-<title>{% block title %}mmmoney{% endblock %}</title>
-<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-<link rel="stylesheet" href="{{ STATIC_URL }}mmmoney/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'mmmoney/stylesheets/app.css' %}">
+  <script src="{% static 'mmmoney/javascripts/foundation/modernizr.foundation.js' %}"></script>
+  <title>{% block title %}mmmoney{% endblock %}</title>
 </head>
 <body>
 {% block body %}
-<div id="tabs" class="cf">
-    <a href="/">{% trans "entries"|capfirst %}</a>
-    <a href="/add/">{% trans "add"|capfirst %}</a>
-    <a href="/stats/">{% trans "Stats" %}</a>
-    <a href="{% url django.contrib.auth.views.logout %}" class="right">X&nbsp;</a>
+<div id="tabs" class="row">
+  <a href="/">{% trans "entries"|capfirst %}</a>
+  <a href="/add/">{% trans "add"|capfirst %}</a>
+  <a href="/stats/">{% trans "Stats" %}</a>
+  <a href="{% url 'logout' %}" class="right">X&nbsp;</a>
 </div>
-<div id="content">
-{% for message in messages %}
-{% if forloop.first %}<ul class="messages">{% endif %}
+<div id="content" class="row">
+  {% for message in messages %}
+    {% if forloop.first %}<ul class="messages">{% endif %}
     <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
-{% if forloop.last %}</ul>{% endif %}
-{% endfor %}
+    {% if forloop.last %}</ul>{% endif %}
+  {% endfor %}
 
-{% block content %}{% endblock %}</div>
+  {% block content %}{% endblock %}
+</div>
 {% endblock %}
 </body>
-</html>{% endspaceless %}
+</html>

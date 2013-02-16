@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
 {% load i18n towel_form_tags %}
+{% load url from future %}
 
 {% block body %}
-<form action="{% url login %}" method="post">
+<form action="{% url 'login' %}" method="post">
     <h1>{% trans "Login" %}</h1>
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ request.GET.next|default:"/" }}">
