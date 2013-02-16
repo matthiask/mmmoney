@@ -15,7 +15,7 @@ def deploy():
         run('venv/bin/pip install -r requirements/live.txt')
         run('venv/bin/python manage.py migrate')
         run('venv/bin/python manage.py syncdb')
-        #with cd('tomac/static/tomac'):
-            #run('GEM_HOME=/home/mk/_gems/ /home/mk/_gems/bin/compass compile -s compressed')
+        with cd('mmmoney/static/mmmoney'):
+            run('GEM_HOME=/home/mk/_gems/ /home/mk/_gems/bin/compass compile -s compressed')
         run('venv/bin/python manage.py collectstatic --noinput')
         run('sudo supervisorctl restart mk_mmmoney')
