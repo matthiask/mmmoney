@@ -1,5 +1,6 @@
 import os, sys
-APPDIR = os.path.dirname(__file__)
+APP_DIR = os.path.dirname(__file__)
+BASE_DIR = os.path.dirname(APP_DIR)
 
 DEBUG = any((c in sys.argv for c in ('runserver', 'shell', 'dbshell', 'sql', 'sqlall')))
 TEMPLATE_DEBUG = DEBUG
@@ -29,7 +30,7 @@ USE_L10N = True
 USE_TZ = True
 MEDIA_ROOT = ''
 MEDIA_URL = ''
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
@@ -82,11 +83,11 @@ ROOT_URLCONF = 'mmmoney.urls'
 WSGI_APPLICATION = 'mmmoney.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(APPDIR, 'templates'),
+    os.path.join(APP_DIR, 'templates'),
 )
 
 LOCALE_PATHS = (
-    os.path.join(os.path.dirname(APPDIR), 'locale'),
+    os.path.join(os.path.dirname(APP_DIR), 'locale'),
 )
 
 INSTALLED_APPS = (
@@ -102,36 +103,7 @@ INSTALLED_APPS = (
     'south',
 )
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-"""
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
-"""
-
-import dj_database_url
-DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+try:
+    from .local_settings import *
+except ImportError:
+    pass
