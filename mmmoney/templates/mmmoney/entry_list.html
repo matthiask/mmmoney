@@ -2,10 +2,12 @@
 
 {% block objects %}
 {% for object in object_list.select_related %}
-<a class="object" href="{{ object.get_absolute_url }}">
+<p>
+<a href="{{ object.get_absolute_url }}">
     <strong>{{ object.list }}{% if object.notes %}: {{ object.notes }}{% endif %}</strong>
     {{ object.date|date:"d.m." }} | {{ object.paid_by.first_name|default:object.paid_by.username }} |
     {{ object.currency }} {{ object.total|stringformat:".2f" }}
 </a>
+</p>
 {% endfor %}
 {% endblock %}
