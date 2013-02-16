@@ -13,10 +13,12 @@
 <body>
 {% block body %}
 <div id="tabs" class="row">
-  <a href="/">{% trans "entries"|capfirst %}</a>
-  <a href="/add/">{% trans "add"|capfirst %}</a>
-  <a href="/stats/">{% trans "Stats" %}</a>
-  <a href="{% url 'logout' %}" class="right">X&nbsp;</a>
+  <h2>
+    <a href="/">{% trans "entries"|capfirst %}</a>
+    <a href="/add/">{% trans "add"|capfirst %}</a>
+    <a href="/stats/">{% trans "Stats" %}</a>
+    <a href="{% url 'logout' %}" class="right">X&nbsp;</a>
+  </h2>
 </div>
 <div id="content" class="row">
   {% for message in messages %}
@@ -24,7 +26,6 @@
     <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
     {% if forloop.last %}</ul>{% endif %}
   {% endfor %}
-
   {% block content %}{% endblock %}
 </div>
 {% endblock %}

@@ -16,7 +16,7 @@
             {% form_item field %}
         {% endfor %}
         </fieldset>
-        <button type="submit"><span>{% trans "Search" %}</span></button>
+        <button class="button" type="submit"><span>{% trans "Search" %}</span></button>
         {% if search_form.searching %}
             <a href="?clear=1" class="button">{% trans "Reset" %}</a>
         {% endif %}
