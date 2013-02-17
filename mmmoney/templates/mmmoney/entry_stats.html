@@ -5,13 +5,14 @@
 {% block content %}
 <h1>{% trans "Stats" %}</h1>
 
-<table id="stats">
+<table class="twelve">
 <thead>
     <tr>
         <th></th>
         {% for user in thead %}
             <th>{{ user.first_name|default:user.username }}</th>
         {% endfor %}
+        <th>{% trans "Sum" %}</th>
     </tr>
 </thead>
 <tbody>
