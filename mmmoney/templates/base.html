@@ -12,46 +12,42 @@
 </head>
 <body>
 {% block body %}
-<div class="row">
-  <div class="twelve columns">
-    <nav class="top-bar">
-      <ul>
-        <!-- Title Area -->
-        <li class="name">
-          <h1>
-            <a href="/">
-              mmmoney
-            </a>
-          </h1>
-        </li>
-        <li class="toggle-topbar"><a href="#"></a></li>
-      </ul>
+<nav class="top-bar">
+  <ul>
+    <!-- Title Area -->
+    <li class="name">
+      <h1>
+        <a href="/">
+          mmmoney
+        </a>
+      </h1>
+    </li>
+    <li class="toggle-topbar"><a href="#"></a></li>
+  </ul>
 
-      <section>
-        <!-- Left Nav Section -->
-        <ul class="left">
-          <li class="divider"></li>
-          <li><a href="/add/">{% trans "add"|capfirst %}</a></li>
-          <li><a href="/stats/">{% trans "Stats" %}</a></li>
-          <li class="divider hide-for-small"></li>
-        </ul>
+  <section>
+    <!-- Left Nav Section -->
+    <ul class="left">
+      <li class="divider"></li>
+      <li><a href="/add/">{% trans "add"|capfirst %}</a></li>
+      <li><a href="/stats/">{% trans "Stats" %}</a></li>
+      <li class="divider hide-for-small"></li>
+    </ul>
 
-        <!-- Right Nav Section -->
-        <ul class="right">
-          <li class="divider show-for-medium-and-up"></li>
-          <li class="has-dropdown">
-            <a href="#">{{ user.get_full_name|default:user }}</a>
-            <ul class="dropdown">
-              <li><label>{% trans "Account" %}</label></li>
-              <li><a href="">{% trans "Change password" %}</a></li>
-              <li><a href="{% url 'logout' %}" class="">{% trans "Log out" %}</a></li>
-            </ul>
-          </li>
+    <!-- Right Nav Section -->
+    <ul class="right">
+      <li class="divider show-for-medium-and-up"></li>
+      <li class="has-dropdown">
+        <a href="#">{{ user.get_full_name|default:user }}</a>
+        <ul class="dropdown">
+          <li><label>{% trans "Account" %}</label></li>
+          <li><a href="">{% trans "Change password" %}</a></li>
+          <li><a href="{% url 'logout' %}" class="">{% trans "Log out" %}</a></li>
         </ul>
-      </section>
-    </nav>
-  </div>
-</div>
+      </li>
+    </ul>
+  </section>
+</nav>
 
 <div id="content" class="row">
   <div class="twelve columns">
