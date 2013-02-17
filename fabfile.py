@@ -13,8 +13,8 @@ def deploy():
         run('git pull')
         run('find . -name "*.pyc" -delete')
         run('venv/bin/pip install -r requirements/live.txt')
-        run('venv/bin/python manage.py migrate')
         run('venv/bin/python manage.py syncdb')
+        run('venv/bin/python manage.py migrate')
         with cd('mmmoney/static/mmmoney'):
             run('GEM_HOME=/home/mk/_gems/ /home/mk/_gems/bin/compass compile -s compressed')
         run('venv/bin/python manage.py collectstatic --noinput')
