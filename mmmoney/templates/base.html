@@ -12,22 +12,85 @@
 </head>
 <body>
 {% block body %}
-<div id="tabs" class="row">
-  <h2>
-    <a href="/">{% trans "entries"|capfirst %}</a>
-    <a href="/add/">{% trans "add"|capfirst %}</a>
-    <a href="/stats/">{% trans "Stats" %}</a>
-    <a href="{% url 'logout' %}" class="right">X&nbsp;</a>
-  </h2>
+<div class="row">
+  <div class="twelve columns">
+    <nav class="top-bar">
+      <ul>
+        <!-- Title Area -->
+        <li class="name">
+          <h1>
+            <a href="/">
+              mmmoney
+            </a>
+          </h1>
+        </li>
+        <li class="toggle-topbar"><a href="#"></a></li>
+      </ul>
+
+      <section>
+        <!-- Left Nav Section -->
+        <ul class="left">
+          <li class="divider"></li>
+          <li><a href="/add/">{% trans "add"|capfirst %}</a></li>
+          <li><a href="/stats/">{% trans "Stats" %}</a></li>
+          <li class="divider hide-for-small"></li>
+        </ul>
+
+        <!-- Right Nav Section -->
+        <ul class="right">
+          <li class="divider show-for-medium-and-up"></li>
+          <li class="has-dropdown">
+            <a href="#">{{ user.get_full_name|default:user }}</a>
+            <ul class="dropdown">
+              <li><label>{% trans "Account" %}</label></li>
+              <li><a href="">{% trans "Change password" %}</a></li>
+              <li><a href="{% url 'logout' %}" class="">{% trans "Log out" %}</a></li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+    </nav>
+  </div>
 </div>
+
 <div id="content" class="row">
-  {% for message in messages %}
-    {% if forloop.first %}<ul class="messages">{% endif %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
-    {% if forloop.last %}</ul>{% endif %}
-  {% endfor %}
-  {% block content %}{% endblock %}
+  <div class="twelve columns">
+    {% for message in messages %}
+      {% if forloop.first %}<ul class="messages">{% endif %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+      {% if forloop.last %}</ul>{% endif %}
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </div>
 </div>
 {% endblock %}
+
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.cookie.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.topbar.js"></script>
+<!--
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.accordion.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.reveal.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.placeholder.js"></script>
+-->
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.event.swipe.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.mediaQueryToggle.js"></script>
+<!--
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.alerts.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.orbit.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.joyride.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.navigation.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.clearing.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.magellan.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.event.move.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.buttons.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.tabs.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.tooltips.js"></script>
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.forms.js"></script>
+-->
+
+<!-- Application Javascript, safe to override -->
+<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/app.js"></script>
+
 </body>
 </html>

@@ -1,15 +1,20 @@
 {% load i18n modelview_list %}
-<div class="pagination cf">
-    {% with context.request.GET|querystring as querystring %}
-    <span class="index">{{ page.start_index }} - {{ page.end_index }} / {{ page.paginator.count }}</span>
-
-    <span class="numbers">
+<ul class="pagination">
+  {% with context.request.GET|querystring as querystring %}
+    <li class="arrow {% if not page.has_previous %}unavailable{% endif %}">
+      <a href="?{{ querystring }}&page={{ page.previous_page_index }}">&laquo;</a>
+    </li>
     {% for p in page.page_range %}
-        {% if not p %}&hellip;
-        {% else %}
-            <a {% if p == page.number and not page.show_all_objects %}class="mark"{% endif %} href="?{{ querystring }}&page={{ p }}">{{ p }}</a>
-        {% endif %}
+      {% if not p %}
+        <li class="unavailable"><a href="">&hellip;</a></li>
+      {% else %}
+        <li {% if p == page.number and not page.show_all_objects %}class="current"{% endif %}>
+          <a href="?{{ querystring }}&page={{ p }}">{{ p }}</a>
+        </li>
+      {% endif %}
     {% endfor %}
-    </span>
-    {% endwith %}
+    <li class="arrow {% if not page.has_next %}unavailable{% endif %}">
+      <a href="?{{ querystring }}&page={{ page.next_page_index }}">&raquo;</a>
+    </li>
+  {% endwith %}
 </div>
