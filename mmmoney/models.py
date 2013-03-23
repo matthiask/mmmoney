@@ -19,6 +19,8 @@ class Client(models.Model):
 
 
 class Access(models.Model):
+    MEMBER = access = 10
+
     client = models.ForeignKey(Client, verbose_name=_('client'))
     user = models.OneToOneField(User, verbose_name=_('user'))
 

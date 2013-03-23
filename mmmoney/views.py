@@ -2,17 +2,20 @@ from datetime import date
 
 from django import forms
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 
 from towel.forms import towel_formfield_callback
+from towel.mt import AccessDecorator
 from towel.mt.forms import SearchForm, ModelForm
 from towel.mt.modelview import ModelView
 
-from mmmoney.models import Entry, List
+from mmmoney.models import Access, Entry, List
+
+
+access = AccessDecorator()
 
 
 class EntrySearchForm(SearchForm):
@@ -48,10 +51,10 @@ class EntryModelView(ModelView):
     search_form = EntrySearchForm
 
     def view_decorator(self, func):
-        return login_required(func)
+        return access(Access.MEMBER)(func)
 
     def crud_view_decorator(self, func):
-        return login_required(func)
+        return access(Access.MEMBER)(func)
 
     def additional_urls(self):
         return [
