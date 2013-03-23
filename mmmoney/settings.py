@@ -59,6 +59,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'towel.mt.middleware.LazyAccessMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -99,6 +100,9 @@ INSTALLED_APPS = (
     'towel',
     'south',
 )
+
+TOWEL_MT_CLIENT_MODEL = 'mmmoney.Client'
+TOWEL_MT_ACCESS_MODEL = 'mmmoney.Access'
 
 try:
     from .local_settings import *

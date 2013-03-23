@@ -7,9 +7,39 @@ from django.utils.translation import ugettext_lazy as _
 from towel.managers import SearchManager
 
 
+class Client(models.Model):
+    name = models.CharField(_('client'), max_length=100)
+
+    class Meta:
+        verbose_name = _('client')
+        verbose_name_plural = _('clients')
+
+    def __unicode__(self):
+        return self.name
+
+
+class Access(models.Model):
+    client = models.ForeignKey(Client, verbose_name=_('client'))
+    user = models.OneToOneField(User, verbose_name=_('user'))
+
+    class Meta:
+        verbose_name = _('access')
+        verbose_name_plural = _('accesses')
+
+
+class ListManager(SearchManager):
+    search_fields = ('name',)
+
+    def for_access(self, access):
+        return self.filter(client=access.client_id)
+
+
 class List(models.Model):
+    client = models.ForeignKey(Client, verbose_name=_('client'))
     name = models.CharField(_('name'), max_length=100)
     ordering = models.IntegerField(_('ordering'), default=0)
+
+    objects = ListManager()
 
     class Meta:
         ordering = ['ordering']
@@ -24,11 +54,16 @@ class EntryManager(SearchManager):
     search_fields = ('list__name', 'paid_by__first_name', 'paid_by__last_name',
         'currency', 'total', 'notes')
 
+    def for_access(self, access):
+        return self.filter(client=access.client_id)
+
 
 class Entry(models.Model):
     CURRENCY_CHOICES = (
         ('CHF', 'CHF'),
         )
+
+    client = models.ForeignKey(Client, verbose_name=_('client'))
 
     created = models.DateTimeField(_('created'), default=datetime.now)
     date = models.DateField(_('date'), default=date.today)
@@ -52,3 +87,10 @@ class Entry(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('mmmoney_entry_edit', (), {'pk': self.pk})
+
+
+class UserManagerMixin(object):
+    def for_access(self, access):
+        return self.filter(access__client=access.client_id)
+UserManagerClass = User.objects.__class__
+UserManagerClass.__bases__ = (UserManagerMixin,) + UserManagerClass.__bases__

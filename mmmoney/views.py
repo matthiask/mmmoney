@@ -8,21 +8,23 @@ from django.db.models import Sum
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 
-from towel import forms as towel_forms, modelview
+from towel.forms import towel_formfield_callback
+from towel.mt.forms import SearchForm, ModelForm
+from towel.mt.modelview import ModelView
 
 from mmmoney.models import Entry, List
 
 
-class EntrySearchForm(towel_forms.SearchForm):
+class EntrySearchForm(SearchForm):
     pass
 
 
-class EntryForm(forms.ModelForm):
-    formfield_callback = towel_forms.stripped_formfield_callback
+class EntryForm(ModelForm):
+    formfield_callback = towel_formfield_callback
 
     class Meta:
         model = Entry
-        exclude = ('created', 'currency')
+        exclude = ('client', 'created', 'currency')
         widgets = {
             'paid_by': forms.RadioSelect,
             'list': forms.RadioSelect,
@@ -30,13 +32,18 @@ class EntryForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EntryForm, self).__init__(*args, **kwargs)
-        self.fields['paid_by'].choices = [(u.id, u.get_full_name() or u.username)
-            for u in User.objects.filter(is_active=True).order_by('first_name', 'last_name')]
-        self.fields['list'].choices = [(l.id, l.name)
-            for l in List.objects.all()]
+        self.fields['paid_by'].choices = [(
+            u.id,
+            u.get_full_name() or u.username,
+            ) for u in User.objects.for_access(self.request.access).filter(
+                is_active=True).order_by('first_name', 'last_name')]
+        self.fields['list'].choices = [(
+            l.id,
+            l.name,
+            ) for l in self.fields['list'].queryset.all()]
 
 
-class EntryModelView(modelview.ModelView):
+class EntryModelView(ModelView):
     paginate_by = 50
     search_form = EntrySearchForm
 
@@ -54,6 +61,7 @@ class EntryModelView(modelview.ModelView):
     def get_form_instance(self, request, form_class, instance=None, change=None, **kwargs):
         args = self.extend_args_if_post(request, [])
         kwargs['instance'] = instance
+        kwargs['request'] = request
         if not change:
             kwargs['initial'] = {
                 'paid_by': request.user.id,
@@ -73,10 +81,14 @@ class EntryModelView(modelview.ModelView):
 
     def stats(self, request):
         # TODO handle currency, not necessary yet
-        queryset = Entry.objects.order_by().values('paid_by', 'date').annotate(Sum('total'))
+        queryset = Entry.objects.for_access(
+            request.access
+            ).order_by().values('paid_by', 'date').annotate(Sum('total'))
         stats = {}
         users = set()
-        user_dict = dict((u.id, u) for u in User.objects.all())
+        user_dict = dict((u.id, u) for u in User.objects.filter(
+            access__client=request.access.client_id,
+            ))
 
         for row in queryset:
             month = row['date'].replace(day=1)
@@ -108,4 +120,3 @@ class EntryModelView(modelview.ModelView):
                 }))
 
 entry_views = EntryModelView(Entry)
-
