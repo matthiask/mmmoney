@@ -3,9 +3,13 @@ from django.contrib import admin
 from mmmoney import models
 
 
-admin.site.register(models.Client)
-admin.site.register(models.Access,
-    list_display=('client', 'user'),
+class AccessInline(admin.TabularInline):
+    model = models.Access
+    extra = 1
+
+
+admin.site.register(models.Client,
+    inlines=[AccessInline],
     )
 admin.site.register(models.List,
     list_display=('__unicode__', 'name', 'ordering', 'client'),
