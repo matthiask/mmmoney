@@ -94,5 +94,4 @@ class Entry(models.Model):
 class UserManagerMixin(object):
     def for_access(self, access):
         return self.filter(access__client=access.client_id)
-UserManagerClass = User.objects.__class__
-UserManagerClass.__bases__ = (UserManagerMixin,) + UserManagerClass.__bases__
+User.objects.__class__.__bases__ += (UserManagerMixin,)
