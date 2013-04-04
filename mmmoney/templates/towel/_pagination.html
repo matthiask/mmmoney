@@ -1,20 +1,30 @@
 {% load i18n modelview_list %}
 <ul class="pagination">
   {% with context.request.GET|querystring as querystring %}
-    <li class="arrow {% if not page.has_previous %}unavailable{% endif %}">
-      <a href="?{{ querystring }}&page={{ page.previous_page_index }}">&laquo;</a>
-    </li>
+    {% if page.has_previous %}
+      <li class="arrow">
+        <a href="?{{ querystring }}&amp;page={{ page.previous_page_number }}">
+          &laquo;</a>
+      </li>
+    {% else %}
+      <li class="arrow unavailable"><a href="">&laquo;</a></li>
+    {% endif %}
     {% for p in page.page_range %}
       {% if not p %}
         <li class="unavailable"><a href="">&hellip;</a></li>
       {% else %}
         <li {% if p == page.number and not page.show_all_objects %}class="current"{% endif %}>
-          <a href="?{{ querystring }}&page={{ p }}">{{ p }}</a>
+          <a href="?{{ querystring }}&amp;page={{ p }}">{{ p }}</a>
         </li>
       {% endif %}
     {% endfor %}
-    <li class="arrow {% if not page.has_next %}unavailable{% endif %}">
-      <a href="?{{ querystring }}&page={{ page.next_page_index }}">&raquo;</a>
-    </li>
+    {% if page.has_next %}
+      <li class="arrow">
+        <a href="?{{ querystring }}&amp;page={{ page.next_page_number }}">
+          &raquo;</a>
+      </li>
+    {% else %}
+      <li class="arrow unavailable"><a href="">&raquo;</a></li>
+    {% endif %}
   {% endwith %}
-</div>
+</ul>
