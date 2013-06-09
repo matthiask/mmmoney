@@ -17,7 +17,7 @@ def watch_styles():
 def deploy_styles():
     local('compass clean mmmoney/static/mmmoney')
     local('compass compile -s compressed mmmoney/static/mmmoney')
-    local('scp -r mmmoney/static/mmmoney/stylesheets %s:www/mmmoney/static/mmmoney/' % HOST)
+    local('scp -r mmmoney/static/mmmoney/stylesheets %s:www/mk/mmmoney/static/mmmoney/' % HOST)
 
 
 @task
