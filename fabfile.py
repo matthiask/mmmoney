@@ -1,4 +1,4 @@
-from fabric.api import *
+from fabric.api import cd, env, local, run, task
 
 
 HOST = 'deploy@mmmoney.406.ch'
@@ -17,13 +17,15 @@ def watch_styles():
 def deploy_styles():
     local('compass clean mmmoney/static/mmmoney')
     local('compass compile -s compressed mmmoney/static/mmmoney')
-    local('scp -r mmmoney/static/mmmoney/stylesheets %s:www/mk/mmmoney/static/mmmoney/' % HOST)
+    local(
+        'scp -r mmmoney/static/mmmoney/stylesheets'
+        ' %s:www/mk/mmmoney/static/mmmoney/' % HOST)
 
 
 @task
 def deploy():
+    local('flake8 .')
     deploy_styles()
-
     local('git push origin master')
     with cd('www/mk/mmmoney'):
         run('git fetch')
@@ -34,9 +36,3 @@ def deploy():
         run('venv/bin/python manage.py migrate')
         run('venv/bin/python manage.py collectstatic --noinput')
         run('sudo service www-mk_mmmoney restart')
-
-
-@task
-def pyflakes():
-    # pip install pyflakes
-    local('pyflakes mmmoney/ | grep -v migrations')

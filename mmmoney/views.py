@@ -1,5 +1,3 @@
-from datetime import date
-
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -12,7 +10,7 @@ from towel.mt import AccessDecorator
 from towel.mt.forms import SearchForm, ModelForm
 from towel.mt.modelview import ModelView
 
-from mmmoney.models import Access, Entry, List
+from mmmoney.models import Access, Entry
 
 
 access = AccessDecorator()
@@ -31,19 +29,19 @@ class EntryForm(ModelForm):
         widgets = {
             'paid_by': forms.RadioSelect,
             'list': forms.RadioSelect,
-            }
+        }
 
     def __init__(self, *args, **kwargs):
         super(EntryForm, self).__init__(*args, **kwargs)
-        self.fields['paid_by'].choices = [(
-            u.id,
-            u.get_full_name() or u.username,
-            ) for u in User.objects.for_access(self.request.access).filter(
-                is_active=True).order_by('first_name', 'last_name')]
-        self.fields['list'].choices = [(
-            l.id,
-            l.name,
-            ) for l in self.fields['list'].queryset.all()]
+
+        users = User.objects.for_access(self.request.access).filter(
+            is_active=True).order_by('first_name', 'last_name')
+
+        self.fields['paid_by'].choices = [
+            (u.id, u.get_full_name() or u.username) for u in users]
+
+        self.fields['list'].choices = [
+            (l.id, l.name) for l in self.fields['list'].queryset.all()]
 
 
 class EntryModelView(ModelView):
@@ -59,24 +57,27 @@ class EntryModelView(ModelView):
     def additional_urls(self):
         return [
             (r'^stats/$', self.view_decorator(self.stats)),
-            ]
+        ]
 
-    def get_form_instance(self, request, form_class, instance=None, change=None, **kwargs):
+    def get_form_instance(
+            self, request, form_class, instance=None, change=None, **kwargs):
         args = self.extend_args_if_post(request, [])
         kwargs['instance'] = instance
         kwargs['request'] = request
         if not change:
             kwargs['initial'] = {
                 'paid_by': request.user.id,
-                }
+            }
         return EntryForm(*args, **kwargs)
 
     def response_add(self, request, instance, form, formsets):
-        messages.success(request, _('The new object has been successfully created.'))
+        messages.success(
+            request, _('The new object has been successfully created.'))
         return redirect('mmmoney_entry_list')
 
     def response_edit(self, request, instance, form, formsets):
-        messages.success(request, _('The object has been successfully updated.'))
+        messages.success(
+            request, _('The object has been successfully updated.'))
         return redirect('mmmoney_entry_list')
 
     def deletion_allowed(self, request, instance):
@@ -86,12 +87,12 @@ class EntryModelView(ModelView):
         # TODO handle currency, not necessary yet
         queryset = Entry.objects.for_access(
             request.access
-            ).order_by().values('paid_by', 'date').annotate(Sum('total'))
+        ).order_by().values('paid_by', 'date').annotate(Sum('total'))
         stats = {}
         users = set()
         user_dict = dict((u.id, u) for u in User.objects.filter(
             access__client=request.access.client_id,
-            ))
+        ))
 
         for row in queryset:
             month = row['date'].replace(day=1)
@@ -102,7 +103,9 @@ class EntryModelView(ModelView):
             by_month.setdefault(user, 0)
             by_month[user] += row['total__sum']
 
-        users = sorted(users, key=lambda user: (user.first_name, user.username))
+        users = sorted(
+            users,
+            key=lambda user: (user.first_name, user.username))
         tbody = []
         for month, month_data in sorted(stats.items()):
             row = [month, [], 0]
@@ -114,12 +117,14 @@ class EntryModelView(ModelView):
         tfoot = [sum(user) for user in zip(*[row[1] for row in tbody])]
         tfoot.append(sum(tfoot, 0))
 
-        return self.render(request,
+        return self.render(
+            request,
             self.get_template(request, 'stats'),
             self.get_context(request, {
                 'thead': users,
                 'tbody': tbody,
                 'tfoot': tfoot,
-                }))
+            })
+        )
 
 entry_views = EntryModelView(Entry)

@@ -53,8 +53,9 @@ class List(models.Model):
 
 
 class EntryManager(SearchManager):
-    search_fields = ('list__name', 'paid_by__first_name', 'paid_by__last_name',
-        'currency', 'total', 'notes')
+    search_fields = (
+        'list__name', 'paid_by__first_name', 'paid_by__last_name', 'currency',
+        'total', 'notes')
 
     def for_access(self, access):
         return self.filter(client=access.client_id)
@@ -63,19 +64,20 @@ class EntryManager(SearchManager):
 class Entry(models.Model):
     CURRENCY_CHOICES = (
         ('CHF', 'CHF'),
-        )
+    )
 
     client = models.ForeignKey(Client, verbose_name=_('client'))
 
     created = models.DateTimeField(_('created'), default=datetime.now)
     date = models.DateField(_('date'), default=date.today)
 
-    paid_by = models.ForeignKey(User, verbose_name=_('paid by'),
-        related_name='entries')
-    list = models.ForeignKey(List, verbose_name=_('list'),
-        related_name='entries')
-    currency = models.CharField(_('currency'), max_length=3,
-        choices=CURRENCY_CHOICES, default=CURRENCY_CHOICES[0][0])
+    paid_by = models.ForeignKey(
+        User, verbose_name=_('paid by'), related_name='entries')
+    list = models.ForeignKey(
+        List, verbose_name=_('list'), related_name='entries')
+    currency = models.CharField(
+        _('currency'), max_length=3, choices=CURRENCY_CHOICES,
+        default=CURRENCY_CHOICES[0][0])
     total = models.DecimalField(_('total'), max_digits=10, decimal_places=2)
     notes = models.TextField(_('notes'), blank=True)
 

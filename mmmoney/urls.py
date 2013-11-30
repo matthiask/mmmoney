@@ -7,7 +7,8 @@ from mmmoney.views import entry_views
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'', include(entry_views.urls)),
     url(r'^admin/', include(admin.site.urls)),
