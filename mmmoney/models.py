@@ -5,8 +5,10 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from towel.managers import SearchManager
+from towel.resources.urls import model_resource_urls
 
 
+@model_resource_urls()
 class Client(models.Model):
     name = models.CharField(_('client'), max_length=100)
 
@@ -18,6 +20,7 @@ class Client(models.Model):
         return self.name
 
 
+@model_resource_urls()
 class Access(models.Model):
     MEMBER = access = 10
 
@@ -36,6 +39,7 @@ class ListManager(SearchManager):
         return self.filter(client=access.client_id)
 
 
+@model_resource_urls()
 class List(models.Model):
     client = models.ForeignKey(Client, verbose_name=_('client'))
     name = models.CharField(_('name'), max_length=100)
@@ -61,6 +65,7 @@ class EntryManager(SearchManager):
         return self.filter(client=access.client_id)
 
 
+@model_resource_urls(default='edit')
 class Entry(models.Model):
     CURRENCY_CHOICES = (
         ('CHF', 'CHF'),
@@ -87,10 +92,6 @@ class Entry(models.Model):
         ordering = ['-date', '-created']
         verbose_name = _('entry')
         verbose_name_plural = _('entries')
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('mmmoney_entry_edit', (), {'pk': self.pk})
 
 
 class UserManagerMixin(object):
