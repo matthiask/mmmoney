@@ -1,5 +1,5 @@
 from django import forms
-from django.conf.urls import include, patterns, url
+from django.conf.urls import patterns
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Sum
