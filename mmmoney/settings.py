@@ -99,6 +99,8 @@ INSTALLED_APPS = (
 TOWEL_MT_CLIENT_MODEL = 'mmmoney.Client'
 TOWEL_MT_ACCESS_MODEL = 'mmmoney.Access'
 
+LOGIN_REDIRECT_URL = '/'
+
 try:
     from .local_settings import *  # noqa
 except ImportError:
