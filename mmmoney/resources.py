@@ -129,7 +129,7 @@ urlpatterns = patterns(
     '',
     entry_url(
         'list',
-        paginate_by=100,
+        paginate_by=25,
         search_form=EntrySearchForm,
         url=r'^$',
     ),
