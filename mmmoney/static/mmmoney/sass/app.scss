@@ -138,10 +138,21 @@ label span {
     color: lighten($body-font-color, 10%);
 }
 
-.required label {
-    font-weight: bold;
+.required {
+    label {
+        font-weight: bold;
+    }
+
     ul label {
         font-weight: normal;
+    }
+}
+
+.type-list ul {
+    margin-top: 0.5em;
+
+    input {
+        margin-right: 0.25em;
     }
 }
 
