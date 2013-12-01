@@ -62,6 +62,8 @@ class EntryMixin(object):
     def get_batch_actions(self):
         return []
 
+
+class EntryFormMixin(object):
     def form_valid(self, form):
         self.object = form.save()
         messages.success(
@@ -140,10 +142,12 @@ urlpatterns = patterns(
         'add',
         form_class=EntryForm,
         url=r'^add/$',
+        mixins=(EntryFormMixin, EntryMixin, MultitenancyMixin),
     ),
     entry_url(
         'edit',
         form_class=EntryForm,
+        mixins=(EntryFormMixin, EntryMixin, MultitenancyMixin),
     ),
     entry_url(
         'delete',
