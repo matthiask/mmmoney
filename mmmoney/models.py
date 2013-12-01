@@ -93,6 +93,9 @@ class Entry(models.Model):
         verbose_name = _('entry')
         verbose_name_plural = _('entries')
 
+    def __unicode__(self):
+        return self.notes
+
 
 class UserManagerMixin(object):
     def for_access(self, access):

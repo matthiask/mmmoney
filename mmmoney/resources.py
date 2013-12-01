@@ -1,14 +1,17 @@
 from django import forms
+from django.conf.urls import include, patterns, url
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 
+from towel import resources
 from towel.forms import towel_formfield_callback
 from towel.mt import AccessDecorator
 from towel.mt.forms import SearchForm, ModelForm
-from towel.mt.modelview import ModelView
+from towel.resources.mt import MultitenancyMixin
+from towel.resources.urls import resource_url_fn
 
 from mmmoney.models import Access, Entry
 
@@ -32,6 +35,12 @@ class EntryForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        if not kwargs.get('instance'):
+            request = kwargs.get('request')
+            kwargs.setdefault('initial', {}).update({
+                'paid_by': request.user.id,
+            })
+
         super(EntryForm, self).__init__(*args, **kwargs)
 
         users = User.objects.for_access(self.request.access).filter(
@@ -44,46 +53,29 @@ class EntryForm(ModelForm):
             (l.id, l.name) for l in self.fields['list'].queryset.all()]
 
 
-class EntryModelView(ModelView):
-    paginate_by = 50
-    search_form = EntrySearchForm
+class EntryMixin(object):
+    def allow_delete(self, object=None, silent=True):
+        if object is None:
+            return True
+        return object.paid_by == self.request.user
 
-    def view_decorator(self, func):
-        return access(Access.MEMBER)(func)
+    def get_batch_actions(self):
+        return []
 
-    def crud_view_decorator(self, func):
-        return access(Access.MEMBER)(func)
-
-    def additional_urls(self):
-        return [
-            (r'^stats/$', self.view_decorator(self.stats)),
-        ]
-
-    def get_form_instance(
-            self, request, form_class, instance=None, change=None, **kwargs):
-        args = self.extend_args_if_post(request, [])
-        kwargs['instance'] = instance
-        kwargs['request'] = request
-        if not change:
-            kwargs['initial'] = {
-                'paid_by': request.user.id,
-            }
-        return EntryForm(*args, **kwargs)
-
-    def response_add(self, request, instance, form, formsets):
+    def form_valid(self, form):
+        self.object = form.save()
         messages.success(
-            request, _('The new object has been successfully created.'))
-        return redirect('mmmoney_entry_list')
+            self.request,
+            _('The %(verbose_name)s has been successfully saved.') %
+            self.object._meta.__dict__,
+        )
+        return redirect(self.object.urls.url('list'))
 
-    def response_edit(self, request, instance, form, formsets):
-        messages.success(
-            request, _('The object has been successfully updated.'))
-        return redirect('mmmoney_entry_list')
 
-    def deletion_allowed(self, request, instance):
-        return request.user == instance.paid_by
+class EntryStatsView(resources.ModelResourceView):
+    template_name_suffix = '_stats'
 
-    def stats(self, request):
+    def get(self, request, *args, **kwargs):
         # TODO handle currency, not necessary yet
         queryset = Entry.objects.for_access(
             request.access
@@ -117,14 +109,43 @@ class EntryModelView(ModelView):
         tfoot = [sum(user) for user in zip(*[row[1] for row in tbody])]
         tfoot.append(sum(tfoot, 0))
 
-        return self.render(
-            request,
-            self.get_template(request, 'stats'),
-            self.get_context(request, {
-                'thead': users,
-                'tbody': tbody,
-                'tfoot': tfoot,
-            })
-        )
+        return self.render_to_response({
+            'thead': users,
+            'tbody': tbody,
+            'tfoot': tfoot,
+        })
 
-entry_views = EntryModelView(Entry)
+
+entry_url = resource_url_fn(
+    Entry,
+    decorators=(access(Access.MEMBER,),),
+    mixins=(EntryMixin, MultitenancyMixin),
+)
+
+
+urlpatterns = patterns(
+    '',
+    entry_url(
+        'list',
+        paginate_by=50,
+        search_form=EntrySearchForm,
+        url=r'^$',
+    ),
+    entry_url(
+        'stats',
+        view=EntryStatsView,
+        url=r'^stats/$',
+    ),
+    entry_url(
+        'add',
+        form_class=EntryForm,
+        url=r'^add/$',
+    ),
+    entry_url(
+        'edit',
+        form_class=EntryForm,
+    ),
+    entry_url(
+        'delete',
+    ),
+)
