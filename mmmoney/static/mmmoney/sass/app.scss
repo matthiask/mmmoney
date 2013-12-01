@@ -46,7 +46,7 @@ $topbar-menu-link-color-toggled: $body-font-color;
 $topbar-menu-icon-color-toggled: $body-font-color;
 
 $topbar-arrows: true;
-$topbar-breakpoint: 768px;
+$topbar-breakpoint: 0px;
 
 
 // BREADCRUMBS
@@ -87,7 +87,7 @@ $sub-nav-font-color: #666;
 //
 
 @import "foundation/components/visibility";
-@import "foundation/components/block-grid";
+// @import "foundation/components/block-grid";
 @import "foundation/components/type";
 @import "foundation/components/buttons";
 @import "foundation/components/forms"; // *requires components/buttons
@@ -98,12 +98,12 @@ $sub-nav-font-color: #666;
 // @import "foundation/components/flex-video";
 // @import "foundation/components/section";
 @import "foundation/components/top-bar";  // *requires components/grid
-@import "foundation/components/orbit";
-@import "foundation/components/reveal";
+// @import "foundation/components/orbit";
+// @import "foundation/components/reveal";
 // @import "foundation/components/joyride";
 // @import "foundation/components/clearing";
 @import "foundation/components/alert-boxes";
-@import "foundation/components/breadcrumbs";
+// @import "foundation/components/breadcrumbs";
 // @import "foundation/components/keystrokes";
 // @import "foundation/components/labels";
 // @import "foundation/components/inline-lists";
@@ -112,11 +112,11 @@ $sub-nav-font-color: #666;
 // @import "foundation/components/pricing-tables";
 // @import "foundation/components/progress-bars";
 @import "foundation/components/side-nav";
-@import "foundation/components/sub-nav";
+// @import "foundation/components/sub-nav";
 // @import "foundation/components/switch";
 // @import "foundation/components/magellan";
 @import "foundation/components/tables";
-@import "foundation/components/thumbs";
+// @import "foundation/components/thumbs";
 // @import "foundation/components/tooltips";
 @import "foundation/components/dropdown";
 
