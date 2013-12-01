@@ -1,93 +1,189 @@
 <!DOCTYPE html>
-{% load i18n staticfiles %}
-{% load url from future %}
-<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<!--[if IE 8]>          <html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+
+{% load i18n mark_current staticfiles towel_form_tags %}
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{% static 'mmmoney/stylesheets/app.css' %}">
-  <script src="{% static 'mmmoney/javascripts/foundation/modernizr.foundation.js' %}"></script>
-  <link rel="shortcut icon" href="{% static 'mmmoney/favicon.png' %}">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
   <title>{% block title %}mmmoney{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'mmmoney/stylesheets/app.css' %}" />
+  <link href="{% static 'chosen/chosen.css' %}" rel="stylesheet">
+  <link href="{% static 'towel_foundation/datepicker/datePicker.css' %}" rel="stylesheet">
+  <link href="{% static 'towel_foundation/towel_foundation.css' %}" rel="stylesheet">
+  <script>var onReady = [], onForm = [];</script>
+  <script src="{% static 'mmmoney/javascripts/vendor/custom.modernizr.js' %}"></script>
 </head>
 <body>
-{% block body %}
-<nav class="top-bar">
-  <ul>
-    <!-- Title Area -->
-    <li class="name">
-      <h1>
-        <a href="/">
-          mmmoney
-        </a>
-      </h1>
-    </li>
-    <li class="toggle-topbar"><a href="#"></a></li>
-  </ul>
 
-  <section>
-    <!-- Left Nav Section -->
-    <ul class="left">
-      <li class="divider"></li>
-      <li><a href="/add/">{% trans "add"|capfirst %}</a></li>
-      <li><a href="/stats/">{% trans "Stats" %}</a></li>
-      <li class="divider hide-for-small"></li>
-    </ul>
-
-    <!-- Right Nav Section -->
-    <ul class="right">
-      <li class="divider show-for-medium-and-up"></li>
-      <li class="has-dropdown">
-        <a href="#">{{ user.get_full_name|default:user }}</a>
-        <ul class="dropdown">
-          <li><label>{% trans "Account" %}</label></li>
-          <li><a href="">{% trans "Change password" %}</a></li>
-          <li><a href="{% url 'logout' %}" class="">{% trans "Log out" %}</a></li>
-        </ul>
+  <nav class="top-bar">
+    <ul class="title-area">
+      <li class="name">
+        <h1><a id="logo" href="/">mmmoney</a></h1>
       </li>
+      <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
     </ul>
-  </section>
-</nav>
 
-<div id="content" class="row">
-  <div class="twelve columns">
-    {% for message in messages %}
-      {% if forloop.first %}<ul class="messages">{% endif %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
-      {% if forloop.last %}</ul>{% endif %}
-    {% endfor %}
-    {% block content %}{% endblock %}
+    {% block navigation %}
+      {% if request.user.is_authenticated %}
+        <section class="top-bar-section">
+          <ul class="left">
+            <li class="divider"></li>
+            {% mark_current request.path %}
+            <li><a href="{% url 'mmmoney_entry_list' %}">
+              {% trans "List" %}
+            </a></li>
+            <li><a href="{% url 'mmmoney_entry_add' %}">
+              {% trans "Add" %}
+            </a></li>
+            <li><a href="{% url 'mmmoney_entry_stats' %}">
+              {% trans "Stats" %}
+            </a></li>
+            {% endmark_current %}
+          </ul>
+
+          <ul class="right">
+            <li class="has-dropdown">
+              <a href="#{{ user.get_absolute_url }}" class="dropdown-toggle"
+                  data-toggle="dropdown">
+                {{ user }} <span class="caret"></span></a>
+              </a>
+              <ul class="dropdown">
+                <li><a href="{% url 'password_change' %}">
+                  <i class="fi-lock"></i>
+                  {% trans "Change my password" %}</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url 'logout' %}">
+                  <i class="fi-power"></i>
+                  Sign Out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+      {% endif %}
+    {% endblock %}
+  </nav>
+
+
+{% block main %}
+  <div class="row">
+    <div class="large-12 columns">
+      {% block page-header %}
+        {% if verbose_name_plural %}
+          <div class="page-header">
+            {% if search_form %}
+              <form method="get" action="{{ list_url|default:"." }}"
+                  class="form-search right">
+                <input type="hidden" name="s" value="1">
+                {% for field in search_form.fields_iterator %}
+                  {% if forloop.first %}
+                    <div class="panel">
+                  {% endif %}
+                      {% if field.is_hidden %}
+                        {{ field }}
+                      {% else %}
+                        {% form_item field %}
+                      {% endif %}
+                  {% if forloop.last %}
+                        {% if search_form.searching %}
+                          <a href="{{ list_url|default:"." }}?clear=1" class="button">
+                            {% trans "Reset" %}</a>
+                        {% endif %}
+                        <button type="submit" class="button right">
+                          {% trans "Search" %}</button>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+
+                <div class="row collapse">
+                  <div class="small-9 columns">{{ search_form.query }}</div>
+                  <div class="small-3 columns">
+                    <button type="button" data-toggle="form"
+                      class="button postfix radius secondary dropdown"></button>
+                  </div>
+                </div>
+                <input type="submit" style="margin-left:-4000em">
+              </form>
+            {% endif %}
+            <h1>
+              {{ verbose_name_plural|capfirst }}
+              {% if paginator %}
+              <small>
+                {{ page.start_index }} - {{ page.end_index }}
+                / {{ paginator.count }}
+
+                {% if search_form.searching %}
+                {% with total=view.get_queryset.count %}
+                {% if total and paginator.count != total %}
+                  (<a href="?clear=1">{% blocktrans %}{{ total }} total{% endblocktrans %}</a>)
+                {% endif %}
+                {% endwith %}
+                {% endif %}
+              </small>
+              {% endif %}
+            </h1>
+          </div>
+        {% endif %}
+      {% endblock page-header %}
+    </div>
   </div>
-</div>
-{% endblock %}
 
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.cookie.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.topbar.js"></script>
-<!--
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.accordion.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.reveal.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.placeholder.js"></script>
--->
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.event.swipe.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.mediaQueryToggle.js"></script>
-<!--
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.alerts.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.orbit.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.joyride.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.navigation.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.clearing.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.magellan.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.event.move.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.buttons.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.tabs.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.tooltips.js"></script>
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/jquery.foundation.forms.js"></script>
--->
+  <div class="row">
+    <div class="large-9 columns">
+      {% block messages %}{% include "towel/_messages.html" %}{% endblock %}
+      {% block content %}{% endblock %}
+    </div><!--/span-->
+    <div class="large-3 columns" id="sidebar">
+      {% block sidebar %}
+        {% if verbose_name and add_url and adding_allowed or view.allow_add %}
+          <div class="panel">
+            <ul class="side-nav">
+              <li>{{ verbose_name_plural }}</li>
 
-<!-- Application Javascript, safe to override -->
-<script src="{{ STATIC_URL }}mmmoney/javascripts/foundation/app.js"></script>
+              {% mark_current request.path %}
+              <li><a href="{{ add_url }}" class="add">
+                {% blocktrans %}New {{ verbose_name }}{% endblocktrans %}</a></li>
+              {% endmark_current %}
+            </ul>
+          </div>
+        {% endif %}
+      {% endblock %}
+    </div><!--/span-->
+  </div><!--/row-->
+{% endblock main %}
 
+  <script src="{% static 'mmmoney/javascripts/vendor/jquery.js' %}"></script>
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.js' %}"></script>
+  <!--
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.cookie.js' %}"></script>
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.dropdown.js' %}"></script>
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.placeholder.js' %}"></script>
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.section.js' %}"></script>
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.reveal.js' %}"></script>
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.tooltips.js' %}"></script>
+  -->
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.topbar.js' %}"></script>
+  <!--
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.clearing.js' %}"></script>
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.magellan.js' %}"></script>
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.forms.js' %}"></script>
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.joyride.js' %}"></script>
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.orbit.js' %}"></script>
+  -->
+  <script src="{% static 'mmmoney/javascripts/foundation/foundation.alerts.js' %}"></script>
+
+  <script src="{% static 'towel/towel.js' %}"></script>
+  <script src="{% static 'towel/towel_editlive.js' %}"></script>
+  <script src="{% static 'chosen/chosen.jquery.min.js' %}"></script>
+  <script src="{% static 'towel_foundation/jquery.elastic.min.js' %}"></script>
+  <script src="{% static 'towel_foundation/datepicker/date.js' %}"></script>
+  <script src="{% static 'towel_foundation/datepicker/jquery.datePicker.js' %}"></script>
+  <script src="{% static 'towel_foundation/towel_foundation.js' %}"></script>
+  <script>
+    $(document).foundation();
+    $(document).towelFoundation();
+  </script>
+  {% block js %}{% endblock %}
 </body>
 </html>

@@ -89,10 +89,11 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.admin',
     'mmmoney',
+    'towel_foundation',
     'towel',
     'south',
+    'django.contrib.admin',
 )
 
 TOWEL_MT_CLIENT_MODEL = 'mmmoney.Client'
