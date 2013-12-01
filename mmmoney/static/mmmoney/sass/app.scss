@@ -160,7 +160,7 @@ label span {
 
 .form-search {
     position: relative;
-    width: 240px;
+    width: 160px;
 
     .input-group { width: 195px; margin-right: 5px; }
     .panel {
@@ -174,5 +174,17 @@ label span {
         background-color: rgba(245, 245, 245, 0.9);
 
         @include box-shadow(0 3px 9px rgba(0, 0, 0, 0.5));
+    }
+}
+
+
+// TABLES
+
+table {
+    width: 100%;
+
+    th, td {
+        text-align: left;
+        vertical-align: top;
     }
 }
