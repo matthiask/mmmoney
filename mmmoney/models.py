@@ -84,7 +84,7 @@ class Entry(models.Model):
         _('currency'), max_length=3, choices=CURRENCY_CHOICES,
         default=CURRENCY_CHOICES[0][0])
     total = models.DecimalField(_('total'), max_digits=10, decimal_places=2)
-    notes = models.TextField(_('notes'), blank=True)
+    notes = models.CharField(_('notes'), max_length=200)
 
     objects = EntryManager()
 
