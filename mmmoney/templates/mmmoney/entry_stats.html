@@ -1,16 +1,24 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load i18n mark_current %}
 
 {% block content %}
 <h1>{% trans "Stats" %}</h1>
+
+<dl class="sub-nav">
+  <dt>{% trans "By:" %}</dt>
+  <dd {% if by == 'paid_by' %}class="active"{% endif %}>
+    <a href="?by=paid_by">{% trans 'User' %}</a></dd>
+  <dd {% if by == 'list' %}class="active"{% endif %}>
+    <a href="?by=list">{% trans 'List' %}</a></dd>
+</dl>
 
 <table class="twelve">
 <thead>
     <tr>
         <th></th>
-        {% for user in thead %}
-            <th>{{ user.first_name|default:user.username }}</th>
+        {% for cell in thead %}
+            <th>{{ cell }}</th>
         {% endfor %}
         <th>{% trans "Sum" %}</th>
     </tr>
@@ -29,8 +37,8 @@
 <tfoot>
     <tr>
         <th>{% trans "Total" %}</th>
-        {% for user_sum in tfoot %}
-            <td>{{ user_sum|floatformat:".2f" }}</td>
+        {% for column_sum in tfoot %}
+            <td>{{ column_sum|floatformat:".2f" }}</td>
         {% endfor %}
     </tr>
 </tfoot>

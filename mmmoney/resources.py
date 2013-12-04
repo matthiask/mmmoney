@@ -13,7 +13,7 @@ from towel.mt.forms import SearchForm, ModelForm
 from towel.resources.mt import MultitenancyMixin
 from towel.resources.urls import resource_url_fn
 
-from mmmoney.models import Access, Entry
+from mmmoney.models import Access, Entry, List
 
 
 access = AccessDecorator()
@@ -47,7 +47,7 @@ class EntryForm(ModelForm):
             is_active=True).order_by('first_name', 'last_name')
 
         self.fields['paid_by'].choices = [
-            (u.id, u.get_full_name() or u.username) for u in users]
+            (u.id, u) for u in users]
 
         self.fields['list'].choices = [
             (l.id, l.name) for l in self.fields['list'].queryset.all()]
@@ -78,43 +78,57 @@ class EntryStatsView(resources.ModelResourceView):
     template_name_suffix = '_stats'
 
     def get(self, request, *args, **kwargs):
-        # TODO handle currency, not necessary yet
+        by = request.GET.get('by', 'paid_by')
+
+        if by == 'paid_by':
+            by_set = set()
+            by_dict = dict((u.id, u) for u in User.objects.filter(
+                access__client=request.access.client_id,
+            ))
+            by_sorting_key = lambda user: (user.first_name, user.username)
+
+        elif by == 'list':
+            by_set = set()
+            by_dict = dict((l.id, l) for l in List.objects.for_access(
+                request.access
+            ))
+            by_sorting_key = lambda list_: (list_.ordering, list_.name)
+
+        else:
+            messages.error(request, _('Invalid request.'))
+            return redirect('.')
+
         queryset = Entry.objects.for_access(
             request.access
-        ).order_by().values('paid_by', 'date').annotate(Sum('total'))
+        ).order_by().values(by, 'date').annotate(Sum('total'))
         stats = {}
-        users = set()
-        user_dict = dict((u.id, u) for u in User.objects.filter(
-            access__client=request.access.client_id,
-        ))
 
         for row in queryset:
             month = row['date'].replace(day=1)
             by_month = stats.setdefault(month, {})
-            user = user_dict[row['paid_by']]
-            users.add(user)
+            by_instance = by_dict[row[by]]
+            by_set.add(by_instance)
 
-            by_month.setdefault(user, 0)
-            by_month[user] += row['total__sum']
+            by_month.setdefault(by_instance, 0)
+            by_month[by_instance] += row['total__sum']
 
-        users = sorted(
-            users,
-            key=lambda user: (user.first_name, user.username))
+        by_set = sorted(by_set, key=by_sorting_key)
         tbody = []
         for month, month_data in sorted(stats.items()):
             row = [month, [], 0]
-            for user in users:
-                row[1].append(month_data.get(user, 0))
+            for by_instance in by_set:
+                row[1].append(month_data.get(by_instance, 0))
             row[2] = sum(row[1], 0)
             tbody.append(row)
 
-        tfoot = [sum(user) for user in zip(*[row[1] for row in tbody])]
+        tfoot = [sum(column) for column in zip(*[row[1] for row in tbody])]
         tfoot.append(sum(tfoot, 0))
 
         return self.render_to_response({
-            'thead': users,
+            'thead': by_set,
             'tbody': tbody,
             'tfoot': tfoot,
+            'by': by,
         })
 
 
