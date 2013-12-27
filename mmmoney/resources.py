@@ -57,7 +57,12 @@ class EntryMixin(object):
     def allow_delete(self, object=None, silent=True):
         if object is None:
             return True
-        return object.paid_by == self.request.user
+        if object.paid_by == self.request.user:
+            return True
+        if not silent:
+            messages.error(self.request, _(
+                'You are not allowed to delete %s.') % object)
+        return False
 
     def get_batch_actions(self):
         return []
