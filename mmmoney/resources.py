@@ -126,7 +126,7 @@ class EntryStatsView(resources.ModelResourceView):
             row[2] = sum(row[1], 0)
             tbody.append(row)
 
-        tfoot = [sum(column) for column in zip(*[row[1] for row in tbody])]
+        tfoot = [sum(column) for column in zip(*[tr[1] for tr in tbody])]
         tfoot.append(sum(tfoot, 0))
 
         return self.render_to_response({
