@@ -3,7 +3,7 @@ from fabric.api import cd, env, local, run, task
 
 
 CONFIG = {
-    'host': 'deploy@mmmoney.406.ch',
+    'host': 'www-data@mmmoney.406.ch',
     'project': 'mmmoney',
     'branch': 'master',
 }
@@ -11,8 +11,7 @@ CONFIG = {
 
 CONFIG.update({
     'sass': '{project}/static/{project}'.format(**CONFIG),
-    'service': 'www-mk_mmmoney',
-    'folder': 'www/mk/mmmoney/',
+    'domain': 'mmmoney.406.ch',
 })
 
 
@@ -73,14 +72,14 @@ def runserver(port=8038):
 def deploy_styles():
     local('bundle exec compass clean {sass}')
     local('bundle exec compass compile -s compressed {sass}')
-    local('scp -r {sass}/stylesheets {host}:{folder}static/{project}/')
+    local('scp -r {sass}/stylesheets {host}:{domain}/static/{project}/')
 
 
 @task
 def deploy_code():
     local('flake8 .')
     local('git push origin {branch}')
-    with cd('{folder}'):
+    with cd('{domain}'):
         run('git fetch')
         run('git reset --hard origin/{branch}')
         run('find . -name "*.pyc" -delete')
@@ -88,7 +87,7 @@ def deploy_code():
         run('venv/bin/python manage.py syncdb')
         run('venv/bin/python manage.py migrate')
         run('venv/bin/python manage.py collectstatic --noinput')
-        run('sudo service {service} restart')
+        run('sctl restart {domain}:*')
 
 
 @task
