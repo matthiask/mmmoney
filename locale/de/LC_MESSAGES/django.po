@@ -90,7 +90,7 @@ msgstr "Einträge"
 #: mmmoney/resources.py:71
 #, python-format
 msgid "The %(verbose_name)s has been successfully saved."
-msgstr "%(verbose_name)s wurde erfolgreich aktualisiert."
+msgstr "%(verbose_name)s wurde erfolgreich gespeichert."
 
 #: mmmoney/resources.py:98
 msgid "Invalid request."
