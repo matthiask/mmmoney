@@ -1,0 +1,9 @@
+appdirs==1.4.3
+Django==1.11
+gunicorn==19.7.1
+packaging==16.8
+psycopg2==2.7.1
+pytz==2017.2
+six==1.10.0
+towel==0.10.1
+towel-foundation==0.8.1

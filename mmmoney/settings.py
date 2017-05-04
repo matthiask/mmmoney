@@ -7,7 +7,6 @@ BASE_DIR = os.path.dirname(APP_DIR)
 DEBUG = any(
     (c in sys.argv for c in ('runserver', 'shell', 'dbshell', 'sql', 'sqlall'))
 )
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Matthias Kestenholz', 'mk@feinheit.ch'),
@@ -17,8 +16,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'data.db',
+        'ENGINE': 'django.db.backends.postgres_psycopg2',
+        'NAME': 'mmmoney',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -45,11 +44,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -59,28 +53,30 @@ MIDDLEWARE_CLASSES = (
     'towel.mt.middleware.LazyAccessMiddleware',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    # 'django.core.context_processors.tz',
-    'django.core.context_processors.request',
-    'django.contrib.messages.context_processors.messages',
-)
-
 ROOT_URLCONF = 'mmmoney.urls'
 
 WSGI_APPLICATION = 'mmmoney.wsgi.application'
 
-TEMPLATE_DIRS = (
-    os.path.join(APP_DIR, 'templates'),
-)
-
 LOCALE_PATHS = (
     os.path.join(os.path.dirname(APP_DIR), 'locale'),
 )
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -92,7 +88,6 @@ INSTALLED_APPS = (
     'mmmoney',
     'towel_foundation',
     'towel',
-    'south',
     'django.contrib.admin',
 )
 

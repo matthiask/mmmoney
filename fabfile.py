@@ -31,15 +31,15 @@ run = _configure(run)
 
 
 @task
-def install(req):
+def install():
     if not os.path.isdir('venv'):
         if os.path.exists('venv'):
-            print 'venv exists, but is not a folder. Aborting.'
+            print('venv exists, but is not a folder. Aborting.')
             return
 
         local('virtualenv venv')
 
-    local('venv/bin/pip install -r requirements/{}.txt'.format(req))
+    local('venv/bin/pip install -r requirements.txt')
 
 
 @task
@@ -83,7 +83,7 @@ def deploy_code():
         run('git fetch')
         run('git reset --hard origin/{branch}')
         run('find . -name "*.pyc" -delete')
-        run('venv/bin/pip install -r requirements/live.txt')
+        run('venv/bin/pip install -r requirements.txt')
         run('venv/bin/python manage.py syncdb')
         run('venv/bin/python manage.py migrate')
         run('venv/bin/python manage.py collectstatic --noinput')
@@ -94,3 +94,17 @@ def deploy_code():
 def deploy():
     deploy_styles()
     deploy_code()
+
+
+@task
+def pull_database():
+    local('dropdb --if-exists mmmoney')
+    local('createdb mmmoney')
+    local(
+        'ssh fh06 "source .profile && pg_dump -Ox mk_mmmoney" | psql mmmoney')
+
+
+@task
+def update_requirements():
+    local('venv/bin/pip install -U -r requirements-to-freeze.txt')
+    local('venv/bin/pip freeze -l | grep -v pkg-resources > requirements.txt')

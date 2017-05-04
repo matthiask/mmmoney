@@ -100,5 +100,7 @@ class Entry(models.Model):
 class UserManagerMixin(object):
     def for_access(self, access):
         return self.filter(access__client=access.client_id)
+
+
 User.objects.__class__.__bases__ += (UserManagerMixin,)
 User.__unicode__ = lambda self: self.get_full_name() or self.username

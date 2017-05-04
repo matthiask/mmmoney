@@ -1,5 +1,4 @@
 from django import forms
-from django.conf.urls import patterns
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Sum
@@ -90,14 +89,14 @@ class EntryStatsView(resources.ModelResourceView):
             by_dict = dict((u.id, u) for u in User.objects.filter(
                 access__client=request.access.client_id,
             ))
-            by_sorting_key = lambda user: (user.first_name, user.username)
+            by_sorting_key = lambda user: (user.first_name, user.username)  # noqa
 
         elif by == 'list':
             by_set = set()
             by_dict = dict((l.id, l) for l in List.objects.for_access(
                 request.access
             ))
-            by_sorting_key = lambda list_: (list_.ordering, list_.name)
+            by_sorting_key = lambda list_: (list_.ordering, list_.name)  # noqa
 
         else:
             messages.error(request, _('Invalid request.'))
@@ -144,8 +143,7 @@ entry_url = resource_url_fn(
 )
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     entry_url(
         'list',
         paginate_by=25,
@@ -171,4 +169,4 @@ urlpatterns = patterns(
     entry_url(
         'delete',
     ),
-)
+]
