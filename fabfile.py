@@ -84,7 +84,6 @@ def deploy_code():
         run('git reset --hard origin/{branch}')
         run('find . -name "*.pyc" -delete')
         run('venv/bin/pip install -r requirements.txt')
-        run('venv/bin/python manage.py syncdb')
         run('venv/bin/python manage.py migrate')
         run('venv/bin/python manage.py collectstatic --noinput')
         run('sctl restart {domain}:*')
