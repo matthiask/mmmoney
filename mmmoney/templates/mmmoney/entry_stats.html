@@ -28,9 +28,9 @@
     <tr>
         <th>{{ month|date:"F Y" }}</th>
         {% for data in month_data %}
-            <td>{{ data|floatformat:".2f" }}</td>
+            <td>{{ data|stringformat:".2f" }}</td>
         {% endfor %}
-        <th>{{ month_sum|floatformat:".2f" }}</th>
+        <th>{{ month_sum|stringformat:".2f" }}</th>
     </tr>
 {% endfor %}
 </tbody>
@@ -38,7 +38,7 @@
     <tr>
         <th>{% trans "Total" %}</th>
         {% for column_sum in tfoot %}
-            <td>{{ column_sum|floatformat:".2f" }}</td>
+            <td>{{ column_sum|stringformat:".2f" }}</td>
         {% endfor %}
     </tr>
 </tfoot>
