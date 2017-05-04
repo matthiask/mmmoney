@@ -96,6 +96,11 @@ TOWEL_MT_ACCESS_MODEL = 'mmmoney.Access'
 
 LOGIN_REDIRECT_URL = '/'
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'authlib.backends.EmailBackend',
+)
+
 try:
     from .local_settings import *  # noqa
 except ImportError:

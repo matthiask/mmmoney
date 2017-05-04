@@ -1,4 +1,5 @@
 Django
+django-authlib
 towel
 towel-foundation
 gunicorn
