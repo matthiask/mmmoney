@@ -1,5 +1,6 @@
 Django
 django-authlib
+django-canonical-domain
 towel
 towel-foundation
 gunicorn

@@ -1,0 +1,14 @@
+{
+    "name": "mmmoney",
+    "short_name": "mmmoney",
+    "start_url": "/add/",
+    "display": "standalone",
+    "background_color": "#fff",
+    "description": "mmmoney",
+    "icons": [{
+        "src": "/favicon.png",
+        "sizes": "192x192",
+        "type": "image/png"
+    }],
+    "orientation": "portrait"
+}
