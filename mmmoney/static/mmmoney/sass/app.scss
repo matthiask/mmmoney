@@ -17,7 +17,7 @@ $small-font-size: 80%;
 
 $hr-margin: em-calc(15);
 
-$f: 1.135;
+$f: 1.125;
 $h6-font-size: 1em;
 $h5-font-size: $h6-font-size * $f;
 $h4-font-size: $h5-font-size * $f;
@@ -133,6 +133,12 @@ form ul {
     list-style: none;
 }
 
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0.5em 0;
+}
+
 label span {
     font-size: 80%;
     color: lighten($body-font-color, 10%);
@@ -149,7 +155,7 @@ label span {
 }
 
 .type-list ul {
-    margin-top: 0.5em;
+    margin: 0.5em 0 0.5em 0;
 
     input {
         margin-right: 0.25em;
@@ -172,6 +178,7 @@ label span {
 .form-search {
     position: relative;
     width: 160px;
+    margin-bottom: 0;
 
     .input-group { width: 195px; margin-right: 5px; }
     .panel {

@@ -1,7 +1,10 @@
+from collections import OrderedDict, defaultdict
+
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.db.models.functions import TruncYear
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 
@@ -12,7 +15,7 @@ from towel.mt.forms import SearchForm, ModelForm
 from towel.resources.mt import MultitenancyMixin
 from towel.resources.urls import resource_url_fn
 
-from mmmoney.models import Access, Entry, List
+from mmmoney.models import Access, Entry
 
 
 access = AccessDecorator()
@@ -82,57 +85,46 @@ class EntryStatsView(resources.ModelResourceView):
     template_name_suffix = '_stats'
 
     def get(self, request, *args, **kwargs):
-        by = request.GET.get('by', 'paid_by')
-
-        if by == 'paid_by':
-            by_set = set()
-            by_dict = dict((u.id, u) for u in User.objects.filter(
-                access__client=request.access.client_id,
-            ))
-            by_sorting_key = lambda user: (user.first_name, user.username)  # noqa
-
-        elif by == 'list':
-            by_set = set()
-            by_dict = dict((l.id, l) for l in List.objects.for_access(
-                request.access
-            ))
-            by_sorting_key = lambda list_: (list_.ordering, list_.name)  # noqa
-
-        else:
-            messages.error(request, _('Invalid request.'))
-            return redirect('.')
+        by_set = set()
+        by_dict = dict((u.id, u) for u in User.objects.filter(
+            access__client=request.access.client_id,
+        ))
 
         queryset = Entry.objects.for_access(
             request.access
-        ).order_by().values(by, 'date').annotate(Sum('total'))
-        stats = {}
+        ).order_by().annotate(
+            date_year=TruncYear('date'),
+        ).values(
+            'paid_by',
+            'date_year',
+        ).annotate(
+            total=Sum('total'),
+        )
 
+        stats = defaultdict(lambda: defaultdict(int))
         for row in queryset:
-            month = row['date'].replace(day=1)
-            by_month = stats.setdefault(month, {})
-            by_instance = by_dict[row[by]]
-            by_set.add(by_instance)
+            stats[row['date_year']][by_dict[row['paid_by']]] += row['total']
+            by_set.add(by_dict[row['paid_by']])
 
-            by_month.setdefault(by_instance, 0)
-            by_month[by_instance] += row['total__sum']
+        by_set = sorted(
+            by_set,
+            key=lambda user: (user.first_name, user.username))
 
-        by_set = sorted(by_set, key=by_sorting_key)
+        sumsum = OrderedDict.fromkeys(by_set, 0)
+
         tbody = []
-        for month, month_data in sorted(stats.items()):
-            row = [month, [], 0]
+        for year, year_data in sorted(stats.items(), reverse=True):
+            row = [year, [], 0]
             for by_instance in by_set:
-                row[1].append(month_data.get(by_instance, 0))
+                row[1].append(year_data.get(by_instance, 0))
+                sumsum[by_instance] += year_data.get(by_instance, 0)
             row[2] = sum(row[1], 0)
             tbody.append(row)
-
-        tfoot = [sum(column) for column in zip(*[tr[1] for tr in tbody])]
-        tfoot.append(sum(tfoot, 0))
 
         return self.render_to_response({
             'thead': by_set,
             'tbody': tbody,
-            'tfoot': tfoot,
-            'by': by,
+            'sumsum': sumsum,
         })
 
 
@@ -146,7 +138,7 @@ entry_url = resource_url_fn(
 urlpatterns = [
     entry_url(
         'list',
-        paginate_by=25,
+        paginate_by=50,
         search_form=EntrySearchForm,
         url=r'^$',
     ),

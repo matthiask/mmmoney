@@ -5,13 +5,13 @@
 {% block content %}
 <h1>{% trans "Stats" %}</h1>
 
-<dl class="sub-nav">
-  <dt>{% trans "By:" %}</dt>
-  <dd {% if by == 'paid_by' %}class="active"{% endif %}>
-    <a href="?by=paid_by">{% trans 'User' %}</a></dd>
-  <dd {% if by == 'list' %}class="active"{% endif %}>
-    <a href="?by=list">{% trans 'List' %}</a></dd>
-</dl>
+{% for user, total in sumsum.items %}
+<small>{{ user }}</small><br>
+<h2>{{ total|stringformat:".2f" }}</h2>
+{% endfor %}
+
+<br>
+<br>
 
 <table class="twelve">
 <thead>
@@ -24,23 +24,15 @@
     </tr>
 </thead>
 <tbody>
-{% for month, month_data, month_sum in tbody %}
+{% for year, year_data, year_sum in tbody %}
     <tr>
-        <th>{{ month|date:"F Y" }}</th>
-        {% for data in month_data %}
+        <th>{{ year|date:"Y" }}</th>
+        {% for data in year_data %}
             <td>{{ data|stringformat:".2f" }}</td>
         {% endfor %}
-        <th>{{ month_sum|stringformat:".2f" }}</th>
+        <th>{{ year_sum|stringformat:".2f" }}</th>
     </tr>
 {% endfor %}
 </tbody>
-<tfoot>
-    <tr>
-        <th>{% trans "Total" %}</th>
-        {% for column_sum in tfoot %}
-            <td>{{ column_sum|stringformat:".2f" }}</td>
-        {% endfor %}
-    </tr>
-</tfoot>
 </table>
 {% endblock %}

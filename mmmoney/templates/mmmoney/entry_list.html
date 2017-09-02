@@ -13,7 +13,7 @@
       {{ object.list }}{% if object.notes %}: {{ object.notes }}{% endif %}
     </a></th>
     <td>{{ object.paid_by.first_name|default:object.paid_by }}</td>
-    <td>{{ object.currency }} {{ object.total|stringformat:".2f" }}</td>
+    <td>{{ object.total|stringformat:".2f" }}</td>
   </tr>
 {% endfor %}
 </table>
