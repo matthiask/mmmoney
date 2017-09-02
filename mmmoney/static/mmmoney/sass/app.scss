@@ -139,9 +139,13 @@ fieldset {
   margin: 0.5em 0;
 }
 
-label span {
+label {
+  font-size: 12px;
+
+  span {
     font-size: 80%;
     color: lighten($body-font-color, 10%);
+  }
 }
 
 .required {
@@ -200,10 +204,22 @@ label span {
 
 table {
     width: 100%;
+    border: none;
+
+    tr {
+        background: transparent !important;
+    }
 
     th, td {
         text-align: left;
         vertical-align: top;
+        padding: .5rem .5rem .5rem 0 !important;
+        line-height: 1.2;
+    }
+
+    th[colspan] {
+        font-size: 70%;
+        padding: .5rem .5rem 0 0 !important;
     }
 
     th:nth-child(n+2),
