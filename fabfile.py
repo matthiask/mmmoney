@@ -63,7 +63,7 @@ def deploy():
         run("venv/bin/pip install -r requirements.txt")
         run("venv/bin/python manage.py migrate")
         run("venv/bin/python manage.py collectstatic --noinput")
-        run("sctl restart {domain}:*")
+        run("systemctl --user restart gunicorn@mmmoney.406.ch.service")
 
 
 @task
