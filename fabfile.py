@@ -2,7 +2,12 @@ import os
 from fabric.api import cd, env, local, run, task
 
 
-CONFIG = {"host": "www-data@mmmoney.406.ch", "project": "mmmoney", "branch": "master"}
+CONFIG = {
+    "host": "www-data@mmmoney.406.ch",
+    "domain": "mmmoney.406.ch",
+    "project": "mmmoney",
+    "branch": "master",
+}
 
 
 env.forward_agent = True
