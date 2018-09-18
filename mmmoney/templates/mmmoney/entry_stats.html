@@ -2,37 +2,87 @@
 
 {% load i18n mark_current %}
 
+{% block title %}Stats - {{ block.super }}{% endblock %}
+
 {% block content %}
 <h1>{% trans "Stats" %}</h1>
 
-{% for user, total in sumsum.items %}
-<small>{{ user }}</small><br>
-<h2>{{ total|stringformat:".2f" }}</h2>
-{% endfor %}
-
-<br>
-<br>
+<h2>{% trans "Team" %}</h2>
 
 <table class="twelve">
 <thead>
     <tr>
         <th></th>
-        {% for cell in thead %}
-            <th>{{ cell }}</th>
+        {% for user in users %}
+            <th>{{ user }}</th>
         {% endfor %}
-        <th>{% trans "Sum" %}</th>
+        <th>{% trans "My delta" %}</th>
     </tr>
 </thead>
 <tbody>
-{% for year, year_data, year_sum in tbody %}
-    <tr>
-        <th>{{ year|date:"Y" }}</th>
-        {% for data in year_data %}
-            <td>{{ data|stringformat:".2f" }}</td>
-        {% endfor %}
-        <th>{{ year_sum|stringformat:".2f" }}</th>
-    </tr>
-{% endfor %}
+  {% for row in client_table %}
+  <tr>
+    {% for cell in row %}
+      {% if forloop.first %}
+        <th>{{ cell }}</th>
+      {% else %}
+        <td>{{ cell|stringformat:".2f" }}</td>
+      {% endif %}
+    {% endfor %}
+  </tr>
+  {% endfor %}
 </tbody>
+<tfoot>
+  <tr>
+    <th>{% trans "Sum" %} {{ this_year_year }}</th>
+    {% for cell in client_sum %}
+      <td>{{ cell|stringformat:".2f" }}</td>
+    {% endfor %}
+  </tr>
+  <tr>
+    <th>Bis und mit {{ last_year_year }}</th>
+    {% for value in until_last_year_sum %}
+      <td>{{ value|stringformat:".2f" }}</td>
+    {% endfor %}
+  </tr>
+  <tr>
+    <th>{% trans "Total" %}</th>
+    {% for cell in total_sum %}
+      <td>{{ cell|stringformat:".2f" }}</td>
+    {% endfor %}
+  </tr>
+</tfoot>
+</table>
+
+<h2>{% trans "Personal" %}</h2>
+<table class="twelve">
+<thead>
+  <tr>
+    <th>{% trans "List" %}</th>
+    <th>{% trans "Total" %}</th>
+  </tr>
+</thead>
+<tbody>
+  {% for list, total in personal_table %}
+  <tr>
+    <th>{{ list }}</th>
+    <td>{{ total|stringformat:".2f" }}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+<tfoot>
+  <tr>
+    <th>{% trans "Sum" %}</th>
+    <td>{{ personal_sum|stringformat:".2f" }}</td>
+  </tr>
+  <tr>
+    <th>Bis und mit {{ last_year_year }}</th>
+    <td>{{ personal_until_last_year_sum|stringformat:".2f" }}</td>
+  </tr>
+  <tr>
+    <th>{% trans "Total" %}</th>
+    <td>{{ personal_sum|add:personal_until_last_year_sum|stringformat:".2f" }}</td>
+  </tr>
+</tfoot>
 </table>
 {% endblock %}

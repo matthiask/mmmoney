@@ -10,3 +10,4 @@
 /venv
 local_settings.py
 /data.db
+.tox

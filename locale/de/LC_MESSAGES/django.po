@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-04 15:34+0100\n"
+"POT-Creation-Date: 2018-09-18 10:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,105 +18,114 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: mmmoney/models.py:13 mmmoney/models.py:16 mmmoney/models.py:27
-#: mmmoney/models.py:44 mmmoney/models.py:74
+#: mmmoney/models.py:14 mmmoney/models.py:17 mmmoney/models.py:28
+#: mmmoney/models.py:45 mmmoney/models.py:91
 msgid "client"
 msgstr "Mandant"
 
-#: mmmoney/models.py:17
+#: mmmoney/models.py:18
 msgid "clients"
 msgstr "Mandanten"
 
-#: mmmoney/models.py:28
+#: mmmoney/models.py:29
 msgid "user"
 msgstr "Benutzer"
 
-#: mmmoney/models.py:31
+#: mmmoney/models.py:32
 msgid "access"
 msgstr "Zugang"
 
-#: mmmoney/models.py:32
+#: mmmoney/models.py:33
 msgid "accesses"
 msgstr "Zugänge"
 
-#: mmmoney/models.py:45
+#: mmmoney/models.py:46
 msgid "name"
 msgstr "Name"
 
-#: mmmoney/models.py:46
+#: mmmoney/models.py:47
 msgid "ordering"
 msgstr "Sortierung"
 
-#: mmmoney/models.py:52 mmmoney/models.py:82
+#: mmmoney/models.py:51
+msgid "personal list"
+msgstr "Persönliche Liste"
+
+#: mmmoney/models.py:60 mmmoney/models.py:97
 msgid "list"
 msgstr "Liste"
 
-#: mmmoney/models.py:53
+#: mmmoney/models.py:61
 msgid "lists"
 msgstr "Listen"
 
-#: mmmoney/models.py:76
+#: mmmoney/models.py:69
+msgid "Personal list client does not match with list client."
+msgstr "Mandant stimmt nicht überein."
+
+#: mmmoney/models.py:93
 msgid "created"
 msgstr "Erstellt"
 
-#: mmmoney/models.py:77
+#: mmmoney/models.py:94
 msgid "date"
 msgstr "Datum"
 
-#: mmmoney/models.py:80
+#: mmmoney/models.py:96
 msgid "paid by"
 msgstr "Bezahlt von"
 
-#: mmmoney/models.py:84
+#: mmmoney/models.py:99
 msgid "currency"
 msgstr "Währung"
 
-#: mmmoney/models.py:86
+#: mmmoney/models.py:104
 msgid "total"
 msgstr "Total"
 
-#: mmmoney/models.py:87
+#: mmmoney/models.py:105
 msgid "notes"
 msgstr "Bemerkungen"
 
-#: mmmoney/models.py:93
+#: mmmoney/models.py:111
 msgid "entry"
 msgstr "Eintrag"
 
-#: mmmoney/models.py:94
+#: mmmoney/models.py:112
 msgid "entries"
 msgstr "Einträge"
 
-#: mmmoney/resources.py:71
+#: mmmoney/resources.py:67
+#, python-format
+msgid "You are not allowed to delete %s."
+msgstr ""
+
+#: mmmoney/resources.py:80
 #, python-format
 msgid "The %(verbose_name)s has been successfully saved."
 msgstr "%(verbose_name)s wurde erfolgreich gespeichert."
 
-#: mmmoney/resources.py:98
-msgid "Invalid request."
-msgstr "Ungültige Anfrage."
-
-#: mmmoney/templates/base.html:35
+#: mmmoney/templates/base.html:36
 msgid "Add"
 msgstr "Neu"
 
-#: mmmoney/templates/base.html:38 mmmoney/templates/mmmoney/entry_stats.html:6
+#: mmmoney/templates/base.html:39 mmmoney/templates/mmmoney/entry_stats.html:8
 msgid "Stats"
 msgstr "Stats"
 
-#: mmmoney/templates/base.html:52
+#: mmmoney/templates/base.html:53
 msgid "Change my password"
 msgstr "Passwort ändern"
 
-#: mmmoney/templates/base.html:88
+#: mmmoney/templates/base.html:89
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: mmmoney/templates/base.html:91
+#: mmmoney/templates/base.html:92
 msgid "Search"
 msgstr "Suche"
 
-#: mmmoney/templates/base.html:117
+#: mmmoney/templates/base.html:118
 #, python-format
 msgid "%(total)s total"
 msgstr "%(total)s total"
@@ -129,22 +138,55 @@ msgstr "sichern"
 msgid "delete"
 msgstr "löschen"
 
-#: mmmoney/templates/mmmoney/entry_stats.html:9
-msgid "By:"
-msgstr "Nach:"
+#: mmmoney/templates/mmmoney/entry_stats.html:10
+msgid "Team"
+msgstr "Team"
 
-#: mmmoney/templates/mmmoney/entry_stats.html:11
-msgid "User"
-msgstr "Benutzer"
+#: mmmoney/templates/mmmoney/entry_stats.html:19
+msgid "My delta"
+msgstr "Mein Delta"
 
-#: mmmoney/templates/mmmoney/entry_stats.html:13
-msgid "List"
-msgstr "Liste"
-
-#: mmmoney/templates/mmmoney/entry_stats.html:23
+#: mmmoney/templates/mmmoney/entry_stats.html:37
+#: mmmoney/templates/mmmoney/entry_stats.html:75
 msgid "Sum"
 msgstr "Summe"
 
-#: mmmoney/templates/mmmoney/entry_stats.html:39
+#: mmmoney/templates/mmmoney/entry_stats.html:49
+#: mmmoney/templates/mmmoney/entry_stats.html:62
+#: mmmoney/templates/mmmoney/entry_stats.html:83
 msgid "Total"
 msgstr "Total"
+
+#: mmmoney/templates/mmmoney/entry_stats.html:57
+msgid "Personal"
+msgstr "Persönlich"
+
+#: mmmoney/templates/mmmoney/entry_stats.html:61
+msgid "List"
+msgstr "Liste"
+
+#: mmmoney/templates/registration/login.html:5
+#: mmmoney/templates/registration/login.html:10
+msgid "Welcome!"
+msgstr "Willkommen!"
+
+#: mmmoney/templates/registration/login.html:17
+msgid "Sign in"
+msgstr "Anmelden"
+
+#: mmmoney/views.py:22
+msgid "No user with email address or user inactive."
+msgstr ""
+
+#: mmmoney/views.py:25
+msgid "Did not get an email address. Please try again."
+msgstr ""
+
+#~ msgid "Invalid request."
+#~ msgstr "Ungültige Anfrage."
+
+#~ msgid "By:"
+#~ msgstr "Nach:"
+
+#~ msgid "User"
+#~ msgstr "Benutzer"
