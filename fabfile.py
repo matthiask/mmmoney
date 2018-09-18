@@ -5,11 +5,6 @@ from fabric.api import cd, env, local, run, task
 CONFIG = {"host": "www-data@mmmoney.406.ch", "project": "mmmoney", "branch": "master"}
 
 
-CONFIG.update(
-    {"sass": "{project}/static/{project}".format(**CONFIG), "domain": "mmmoney.406.ch"}
-)
-
-
 env.forward_agent = True
 env.hosts = [CONFIG["host"]]
 
@@ -43,7 +38,7 @@ def dev():
     import socket
     from threading import Thread
 
-    jobs = [Thread(target=watch_styles), Thread(target=runserver)]
+    jobs = [Thread(target=runserver)]
     try:
         socket.create_connection(("localhost", 6379), timeout=0.1).close()
     except socket.error:
@@ -52,25 +47,13 @@ def dev():
     [j.join() for j in jobs]
 
 
-@task(alias="ws")
-def watch_styles():
-    local("bundle exec compass watch {sass}")
-
-
 @task(alias="rs")
 def runserver(port=8000):
     local("venv/bin/python -Wall manage.py runserver 0.0.0.0:{}".format(port))
 
 
 @task
-def deploy_styles():
-    local("bundle exec compass clean {sass}")
-    local("bundle exec compass compile -s compressed {sass}")
-    local("scp -r {sass}/stylesheets {host}:{domain}/static/{project}/")
-
-
-@task
-def deploy_code():
+def deploy():
     local("flake8 .")
     local("git push origin {branch}")
     with cd("{domain}"):
@@ -84,12 +67,6 @@ def deploy_code():
 
 
 @task
-def deploy():
-    deploy_styles()
-    deploy_code()
-
-
-@task
 def pull_database():
     local("dropdb --if-exists mmmoney")
     local("createdb mmmoney")
@@ -98,5 +75,7 @@ def pull_database():
 
 @task
 def update_requirements():
+    local("rm -rf venv requirements.txt")
+    local("virtualenv venv")
     local("venv/bin/pip install -U -r requirements-to-freeze.txt")
     local("venv/bin/pip freeze -l | grep -v pkg-resources > requirements.txt")

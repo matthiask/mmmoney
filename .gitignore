@@ -1,7 +1,6 @@
 *.pyc
 *~
 .*.swp
-.bundle
 \#*#
 /secrets.py
 /local_settings.py
