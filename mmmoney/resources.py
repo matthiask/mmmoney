@@ -147,13 +147,9 @@ class EntryStatsView(resources.ModelResourceView):
             - sum(until_last_years_end.values()) / len(until_last_years_end)
         ]
 
-        client_sum = [
-            sum(column) for column in list(zip(*client_table))[1:]
-        ]
+        client_sum = [sum(column) for column in list(zip(*client_table))[1:]]
 
-        total_sum = [
-            a + b for a, b in zip(until_last_year_sum, client_sum)
-        ]
+        total_sum = [a + b for a, b in zip(until_last_year_sum, client_sum)]
 
         return self.render_to_response(
             {
@@ -161,14 +157,15 @@ class EntryStatsView(resources.ModelResourceView):
                 "last_year_year": today.year - 1,
                 "this_year_year": today.year,
                 "until_last_year_sum": until_last_year_sum,
-
                 "client_table": client_table,
                 "client_sum": client_sum,
                 "total_sum": total_sum,
-
                 "personal_table": personal_table,
                 "personal_sum": personal_sum,
-                "personal_until_last_year_sum": Entry.objects.for_access(request.access).filter(list__personal=request.user, date__year__lt=today.year).aggregate(Sum("total"))["total__sum"] or 0,
+                "personal_until_last_year_sum": Entry.objects.for_access(request.access)
+                .filter(list__personal=request.user, date__year__lt=today.year)
+                .aggregate(Sum("total"))["total__sum"]
+                or 0,
                 # 'thead': by_set,
                 # 'tbody': tbody,
                 # 'sumsum': sumsum,
