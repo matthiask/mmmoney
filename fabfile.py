@@ -65,6 +65,7 @@ def deploy():
         run("git fetch")
         run("git reset --hard origin/{branch}")
         run('find . -name "*.pyc" -delete')
+        run("venv/bin/pip install -U pip wheel setuptools")
         run("venv/bin/pip install -r requirements.txt")
         run("venv/bin/python manage.py migrate")
         run("venv/bin/python manage.py collectstatic --noinput")
@@ -82,5 +83,6 @@ def pull_database():
 def update_requirements():
     local("rm -rf venv requirements.txt")
     local("virtualenv venv")
+    local("venv/bin/pip install -U pip wheel setuptools")
     local("venv/bin/pip install -U -r requirements-to-freeze.txt")
     local("venv/bin/pip freeze -l | grep -v pkg-resources > requirements.txt")

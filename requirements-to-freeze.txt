@@ -1,7 +1,7 @@
 Django
 django-authlib
 django-canonical-domain
+gunicorn
+psycopg2-binary
 towel
 towel-foundation
-gunicorn
-psycopg2
