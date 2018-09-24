@@ -1,6 +1,7 @@
 Django
 django-authlib
 django-canonical-domain
+flake8
 gunicorn
 psycopg2-binary
 towel
