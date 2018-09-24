@@ -56,7 +56,7 @@ class EntryForm(ModelForm):
         ]
 
 
-class EntryMixin(object):
+class EntryMixin(MultitenancyMixin):
     def allow_delete(self, object=None, silent=True):
         if object is None:
             return True
@@ -70,6 +70,13 @@ class EntryMixin(object):
 
     def get_batch_actions(self):
         return []
+
+    def get_queryset(self):
+        return (
+            super(EntryMixin, self)
+            .get_queryset()
+            .filter(Q(list__personal=None) | Q(list__personal=self.request.user.id))
+        )
 
 
 class EntryFormMixin(object):
@@ -174,7 +181,7 @@ class EntryStatsView(resources.ModelResourceView):
 
 
 entry_url = resource_url_fn(
-    Entry, decorators=(access(Access.MEMBER),), mixins=(EntryMixin, MultitenancyMixin)
+    Entry, decorators=(access(Access.MEMBER),), mixins=(EntryMixin,)
 )
 
 
@@ -182,15 +189,8 @@ urlpatterns = [
     entry_url("list", paginate_by=50, search_form=EntrySearchForm, url=r"^$"),
     entry_url("stats", view=EntryStatsView, url=r"^stats/$"),
     entry_url(
-        "add",
-        form_class=EntryForm,
-        url=r"^add/$",
-        mixins=(EntryFormMixin, EntryMixin, MultitenancyMixin),
+        "add", form_class=EntryForm, url=r"^add/$", mixins=(EntryFormMixin, EntryMixin)
     ),
-    entry_url(
-        "edit",
-        form_class=EntryForm,
-        mixins=(EntryFormMixin, EntryMixin, MultitenancyMixin),
-    ),
+    entry_url("edit", form_class=EntryForm, mixins=(EntryFormMixin, EntryMixin)),
     entry_url("delete"),
 ]

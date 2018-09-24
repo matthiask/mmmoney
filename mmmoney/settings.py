@@ -51,7 +51,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = "mmmoney.urls"
 
-WSGI_APPLICATION = "mmmoney.wsgi.application"
+WSGI_APPLICATION = "wsgi.application"
 
 LOCALE_PATHS = (os.path.join(os.path.dirname(APP_DIR), "locale"),)
 
