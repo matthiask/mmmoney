@@ -59,7 +59,7 @@ def runserver(port=8000):
 
 @task
 def deploy():
-    local("flake8 .")
+    local("venv/bin/flake8 .")
     local("git push origin {branch}")
     with cd("{domain}"):
         run("git fetch")
