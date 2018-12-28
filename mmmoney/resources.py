@@ -144,14 +144,14 @@ class EntryStatsView(resources.ModelResourceView):
                 client_table.append(
                     [l]
                     + [paid.get(user.id, 0) for user in users]
-                    + [paid.get(request.user.id, 0) - sum(paid.values()) / len(paid)]
+                    + [paid.get(request.user.id, 0) - sum(paid.values()) / len(users)]
                 )
 
         until_last_year_sum = [
             until_last_years_end.get(user.id, 0) for user in users
         ] + [
             until_last_years_end.get(request.user.id, 0)
-            - sum(until_last_years_end.values()) / len(until_last_years_end)
+            - sum(until_last_years_end.values()) / len(users)
         ]
 
         client_sum = [sum(column) for column in list(zip(*client_table))[1:]]
