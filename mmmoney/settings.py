@@ -1,6 +1,7 @@
 import os
 import sys
 
+
 APP_DIR = os.path.dirname(__file__)
 BASE_DIR = os.path.dirname(APP_DIR)
 
@@ -39,7 +40,7 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     "canonical_domain.middleware.CanonicalDomainMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",

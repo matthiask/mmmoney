@@ -17,7 +17,7 @@ class Client(models.Model):
         verbose_name = _("client")
         verbose_name_plural = _("clients")
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -25,8 +25,10 @@ class Client(models.Model):
 class Access(models.Model):
     MEMBER = access = 10
 
-    client = models.ForeignKey(Client, verbose_name=_("client"))
-    user = models.OneToOneField(User, verbose_name=_("user"))
+    client = models.ForeignKey(
+        Client, on_delete=models.CASCADE, verbose_name=_("client")
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("user"))
 
     class Meta:
         verbose_name = _("access")
@@ -42,7 +44,9 @@ class ListManager(SearchManager):
 
 @model_resource_urls()
 class List(models.Model):
-    client = models.ForeignKey(Client, verbose_name=_("client"))
+    client = models.ForeignKey(
+        Client, on_delete=models.CASCADE, verbose_name=_("client")
+    )
     name = models.CharField(_("name"), max_length=100)
     ordering = models.IntegerField(_("ordering"), default=0)
     personal = models.ForeignKey(
@@ -60,7 +64,7 @@ class List(models.Model):
         verbose_name = _("list")
         verbose_name_plural = _("lists")
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def clean(self):
@@ -88,13 +92,22 @@ class EntryManager(SearchManager):
 class Entry(models.Model):
     CURRENCY_CHOICES = (("CHF", "CHF"),)
 
-    client = models.ForeignKey(Client, verbose_name=_("client"))
+    client = models.ForeignKey(
+        Client, on_delete=models.CASCADE, verbose_name=_("client")
+    )
 
     created = models.DateTimeField(_("created"), default=datetime.now)
     date = models.DateField(_("date"), default=date.today)
 
-    paid_by = models.ForeignKey(User, verbose_name=_("paid by"), related_name="entries")
-    list = models.ForeignKey(List, verbose_name=_("list"), related_name="entries")
+    paid_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_("paid by"),
+        related_name="entries",
+    )
+    list = models.ForeignKey(
+        List, on_delete=models.CASCADE, verbose_name=_("list"), related_name="entries"
+    )
     currency = models.CharField(
         _("currency"),
         max_length=3,
@@ -111,7 +124,7 @@ class Entry(models.Model):
         verbose_name = _("entry")
         verbose_name_plural = _("entries")
 
-    def __unicode__(self):
+    def __str__(self):
         return self.notes
 
 
@@ -121,4 +134,4 @@ class UserManagerMixin(object):
 
 
 User.objects.__class__.__bases__ += (UserManagerMixin,)
-User.__unicode__ = lambda self: self.get_full_name() or self.username
+User.__str__ = lambda self: self.get_full_name() or self.username

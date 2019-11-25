@@ -1,4 +1,5 @@
 import os
+
 from fabric.api import cd, env, local, run, task
 
 
@@ -33,7 +34,8 @@ def install():
             print("venv exists, but is not a folder. Aborting.")
             return
 
-        local("virtualenv venv")
+        local("python3 -m venv venv")
+        local("venv/bin/pip install -U pip wheel setuptools")
 
     local("venv/bin/pip install -r requirements.txt")
 
@@ -82,7 +84,7 @@ def pull_database():
 @task
 def update_requirements():
     local("rm -rf venv requirements.txt")
-    local("virtualenv venv")
+    local("python3 -m venv venv")
     local("venv/bin/pip install -U pip wheel setuptools")
     local("venv/bin/pip install -U -r requirements-to-freeze.txt")
     local("venv/bin/pip freeze -l | grep -v pkg-resources > requirements.txt")

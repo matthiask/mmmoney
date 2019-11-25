@@ -4,14 +4,14 @@ from datetime import date
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.db.models import Sum, Q
+from django.db.models import Q, Sum
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 
 from towel import resources
 from towel.forms import towel_formfield_callback
 from towel.mt import AccessDecorator
-from towel.mt.forms import SearchForm, ModelForm
+from towel.mt.forms import ModelForm, SearchForm
 from towel.resources.mt import MultitenancyMixin
 from towel.resources.urls import resource_url_fn
 

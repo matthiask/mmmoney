@@ -11,7 +11,7 @@ class AccessInline(admin.TabularInline):
 admin.site.register(models.Client, inlines=[AccessInline])
 admin.site.register(
     models.List,
-    list_display=("__unicode__", "name", "ordering", "client", "personal"),
+    list_display=("__str__", "name", "ordering", "client", "personal"),
     list_editable=("name", "ordering"),
     list_filter=("client",),
 )

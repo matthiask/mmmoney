@@ -9,5 +9,5 @@ urlpatterns = [
     url(r"^accounts/oauth/", views.oauth),
     url(r"^accounts/", include("django.contrib.auth.urls")),
     url(r"", include("mmmoney.resources")),
-    url(r"^admin/", include(admin.site.urls)),
+    url(r"^admin/", admin.site.urls),
 ] + staticfiles_urlpatterns()
