@@ -72,8 +72,8 @@ class Migration(migrations.Migration):
                 (
                     "currency",
                     models.CharField(
-                        choices=[(b"CHF", b"CHF")],
-                        default=b"CHF",
+                        choices=[("CHF", "CHF")],
+                        default="CHF",
                         max_length=3,
                         verbose_name="currency",
                     ),
