@@ -1,6 +1,6 @@
 certifi==2019.9.11
 chardet==3.0.4
-Django==2.2.24
+Django==2.2.27
 django-authlib==0.9.3
 django-canonical-domain==0.3.0
 entrypoints==0.3
