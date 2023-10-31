@@ -1,6 +1,6 @@
 certifi==2022.12.7
 chardet==3.0.4
-Django==2.2.24
+Django==2.2.28
 django-authlib==0.9.3
 django-canonical-domain==0.3.0
 entrypoints==0.3
