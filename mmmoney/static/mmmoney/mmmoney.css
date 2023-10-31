@@ -22,6 +22,8 @@ body {
   top: 0;
   left: 0;
   right: 0;
+  z-index: 1;
+  background: #fff;
   box-shadow: var(--shadow);
   padding: 8px;
 
@@ -56,6 +58,7 @@ fieldset p {
 }
 
 input[type="text"],
+input[type="password"],
 input[type="number"],
 input[type="date"] {
   display: block;
