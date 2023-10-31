@@ -10,6 +10,7 @@ DEBUG = env("DEBUG", required=True)
 TESTING = any(r in sys.argv for r in ("test",))
 LIVE = env("LIVE", default=False)
 ALLOWED_HOSTS = env("ALLOWED_HOSTS", required=True)
+SECURE_SSL_HOST = env("SECURE_SSL_HOST", default="")
 SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT", default=False, warn=True)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
