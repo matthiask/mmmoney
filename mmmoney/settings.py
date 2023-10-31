@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 from speckenv import env
-from speckenv_django import django_cache_url, django_database_url
+from speckenv_django import django_database_url
 
 
 DEBUG = env("DEBUG", required=True)
@@ -19,7 +19,7 @@ MANAGERS = ADMINS
 SERVER_EMAIL = "root@oekohosting.ch"
 
 DATABASES = {"default": django_database_url(env("DATABASE_URL", required=True))}
-CACHES = {"default": django_cache_url(env("CACHE_URL", required=True))}
+# CACHES = {"default": django_cache_url(env("CACHE_URL", required=True))}
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 SECRET_KEY = env("SECRET_KEY", required=True)
