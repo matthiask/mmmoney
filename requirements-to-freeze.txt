@@ -1,8 +1,7 @@
-Django
 django-authlib
 django-canonical-domain
-flake8
+Django<4.1
 gunicorn
 psycopg2-binary
+speckenv
 towel
-towel-foundation

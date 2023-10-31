@@ -1,0 +1,118 @@
+:root {
+  --shadow: 0 0 5px 0 rgba(0 0 30 / 0.5);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: system-ui;
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.top-bar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-shadow: var(--shadow);
+  padding: 8px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.top-bar h1 {
+  padding: 0;
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.row {
+  padding: 8px;
+  position: relative;
+}
+
+fieldset {
+  padding: 0;
+  margin: 0;
+  border: none;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 16px;
+}
+
+fieldset p {
+  padding: 0;
+  margin: 0;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+  display: block;
+  width: 100%;
+  padding: 8px;
+}
+
+.form-actions {
+  margin-top: 1rem;
+}
+
+button,
+input[type="submit"] {
+  padding: 8px;
+}
+
+#filterform {
+  display: flex;
+}
+
+.searchbox + .pagination {
+  display: none;
+}
+
+.table {
+  width: 100%;
+}
+.table td,
+.table th {
+  vertical-align: top;
+  text-align: left;
+  padding: 4px;
+}
+.table tr:nth-child(odd) {
+  background: #e8e8ea;
+}
+
+.entries td:nth-child(3n),
+.stats tr > *:nth-child(n + 2) {
+  text-align: right;
+}
+
+.pagination ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-top: 1rem;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 8px;
+}
+
+a {
+  color: #44f;
+}

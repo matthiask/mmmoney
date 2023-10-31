@@ -6,8 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Q, Sum
 from django.shortcuts import redirect
-from django.utils.translation import ugettext as _
-
+from django.utils.translation import gettext as _
 from towel import resources
 from towel.forms import towel_formfield_callback
 from towel.mt import AccessDecorator
@@ -31,7 +30,10 @@ class EntryForm(ModelForm):
     class Meta:
         model = Entry
         exclude = ("client", "created", "currency")
-        widgets = {"paid_by": forms.RadioSelect, "list": forms.RadioSelect}
+        widgets = {
+            "paid_by": forms.RadioSelect,
+            "list": forms.RadioSelect,
+        }
 
     def __init__(self, *args, **kwargs):
         if not kwargs.get("instance"):
@@ -45,6 +47,8 @@ class EntryForm(ModelForm):
             .filter(is_active=True)
             .order_by("first_name", "last_name")
         )
+
+        self.fields["date"].widget = forms.DateInput(attrs={"type": "date"})
 
         self.fields["paid_by"].choices = [(u.id, u) for u in users]
 
@@ -79,7 +83,7 @@ class EntryMixin(MultitenancyMixin):
         )
 
 
-class EntryFormMixin(object):
+class EntryFormMixin:
     def form_valid(self, form):
         self.object = form.save()
         messages.success(

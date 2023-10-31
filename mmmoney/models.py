@@ -3,8 +3,7 @@ from datetime import date, datetime
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import gettext_lazy as _
 from towel.managers import SearchManager
 from towel.resources.urls import model_resource_urls
 
@@ -128,7 +127,7 @@ class Entry(models.Model):
         return self.notes
 
 
-class UserManagerMixin(object):
+class UserManagerMixin:
     def for_access(self, access):
         return self.filter(access__client=access.client_id)
 

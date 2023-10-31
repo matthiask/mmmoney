@@ -1,7 +1,7 @@
 {% extends "resources/object_list.html" %}
 
 {% block objects %}
-<table class="twelve entries">
+<table class="table entries">
 {% for object in object_list.select_related %}
   {% ifchanged object.date %}
     <tr>

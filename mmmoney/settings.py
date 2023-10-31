@@ -1,39 +1,38 @@
 import os
 import sys
+from pathlib import Path
+
+from speckenv import env
+from speckenv_django import django_cache_url, django_database_url
 
 
-APP_DIR = os.path.dirname(__file__)
-BASE_DIR = os.path.dirname(APP_DIR)
-
-DEBUG = any((c in sys.argv for c in ("runserver", "shell", "dbshell", "sql", "sqlall")))
+DEBUG = env("DEBUG", required=True)
+TESTING = any(r in sys.argv for r in ("test",))
+LIVE = env("LIVE", default=False)
+ALLOWED_HOSTS = env("ALLOWED_HOSTS", required=True)
+SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT", default=False, warn=True)
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 ADMINS = (("Matthias Kestenholz", "mk@feinheit.ch"),)
-
 MANAGERS = ADMINS
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "mmmoney",
-        "USER": "",
-        "PASSWORD": "",
-        "HOST": "",
-        "PORT": "",
-    }
-}
+SERVER_EMAIL = "root@oekohosting.ch"
+
+DATABASES = {"default": django_database_url(env("DATABASE_URL", required=True))}
+CACHES = {"default": django_cache_url(env("CACHE_URL", required=True))}
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+SECRET_KEY = env("SECRET_KEY", required=True)
 
 TIME_ZONE = "Europe/Zurich"
 LANGUAGE_CODE = "de-ch"
 SITE_ID = 1
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 MEDIA_ROOT = ""
 MEDIA_URL = ""
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
-
-STATICFILES_DIRS = ()
 
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -41,7 +40,8 @@ STATICFILES_FINDERS = (
 )
 
 MIDDLEWARE = (
-    "canonical_domain.middleware.CanonicalDomainMiddleware",
+    "canonical_domain.middleware.canonical_domain",
+    "django.middleware.security.SecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -53,8 +53,6 @@ MIDDLEWARE = (
 ROOT_URLCONF = "mmmoney.urls"
 
 WSGI_APPLICATION = "wsgi.application"
-
-LOCALE_PATHS = (os.path.join(os.path.dirname(APP_DIR), "locale"),)
 
 TEMPLATES = [
     {
@@ -81,7 +79,7 @@ INSTALLED_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "mmmoney",
-    "towel_foundation",
+    "canonical_domain",
     "towel",
     "django.contrib.admin",
 )
@@ -96,9 +94,19 @@ AUTHENTICATION_BACKENDS = (
     "authlib.backends.EmailBackend",
 )
 
-try:
-    from .local_settings import *  # noqa
-except ImportError:
-    pass
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET")
 
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+SESSION_COOKIE_HTTPONLY = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "https")
+
+if SECURE_SSL_REDIRECT:
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 7 * 86400
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+else:
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"

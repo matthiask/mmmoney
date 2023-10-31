@@ -1,8 +1,7 @@
+from authlib.google import GoogleOAuth2Client
 from django.contrib import auth, messages
 from django.shortcuts import redirect
-from django.utils.translation import ugettext as _
-
-from authlib.google import GoogleOAuth2Client
+from django.utils.translation import gettext as _
 
 
 def oauth(request):

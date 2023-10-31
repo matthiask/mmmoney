@@ -1,13 +1,13 @@
-from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.urls import include, path, re_path
 
 from mmmoney import views
 
 
 urlpatterns = [
-    url(r"^accounts/oauth/", views.oauth),
-    url(r"^accounts/", include("django.contrib.auth.urls")),
-    url(r"", include("mmmoney.resources")),
-    url(r"^admin/", admin.site.urls),
+    re_path(r"^accounts/oauth/", views.oauth),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("", include("mmmoney.resources")),
+    re_path(r"^admin/", admin.site.urls),
 ] + staticfiles_urlpatterns()

@@ -10,3 +10,5 @@
 local_settings.py
 /data.db
 .tox
+.env
+node_modules
