@@ -1,6 +1,6 @@
 django-authlib
 django-canonical-domain
-Django<4.1
+Django<4.2
 gunicorn
 psycopg2-binary
 speckenv
