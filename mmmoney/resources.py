@@ -38,7 +38,12 @@ class EntryForm(ModelForm):
     def __init__(self, *args, **kwargs):
         if not kwargs.get("instance"):
             request = kwargs.get("request")
-            kwargs.setdefault("initial", {}).update({"paid_by": request.user.id})
+            kwargs.setdefault("initial", {}).update(
+                {
+                    "paid_by": request.user.id,
+                    "date": date.today().isoformat(),
+                }
+            )
 
         super(EntryForm, self).__init__(*args, **kwargs)
 
@@ -48,7 +53,9 @@ class EntryForm(ModelForm):
             .order_by("first_name", "last_name")
         )
 
-        self.fields["date"].widget = forms.DateInput(attrs={"type": "date"})
+        self.fields["date"].widget = forms.DateInput(
+            attrs={"type": "date"},
+        )
 
         self.fields["paid_by"].choices = [(u.id, u) for u in users]
 

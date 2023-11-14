@@ -28,14 +28,19 @@ body {
   padding: 8px;
 
   display: flex;
+  gap: 0.5rem;
   align-items: flex-end;
-  justify-content: space-between;
 }
 
 .top-bar h1 {
   padding: 0;
   margin: 0;
   font-size: 1.25rem;
+}
+
+nav {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .row {
@@ -73,6 +78,26 @@ input[type="date"] {
 button,
 input[type="submit"] {
   padding: 8px;
+}
+
+button {
+  appearance: none;
+  border: none;
+  background-color: transparent;
+  font-family: inherit;
+  padding: 0;
+  cursor: pointer;
+
+  @media screen and (-ms-high-contrast: active) {
+    border: 2px solid currentcolor;
+  }
+}
+
+button,
+.button {
+  background: #44f;
+  color: white;
+  padding: 0.5rem 1rem;
 }
 
 #filterform {

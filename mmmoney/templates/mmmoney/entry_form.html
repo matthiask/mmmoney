@@ -27,7 +27,7 @@
 </fieldset>
 
 <div class="form-actions">
-    <input class="button" type="submit" value="{% trans "save"|capfirst %}">
+    <button class="button" type="submit">{% trans "save"|capfirst %}</button>
 
     {% if object %}
     <a href="{{ object.urls.delete }}" class="button alert right">{% trans "delete"|capfirst %}</a>
