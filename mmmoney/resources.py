@@ -45,7 +45,7 @@ class EntryForm(ModelForm):
                 }
             )
 
-        super(EntryForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         users = (
             User.objects.for_access(self.request.access)
@@ -60,15 +60,15 @@ class EntryForm(ModelForm):
         self.fields["paid_by"].choices = [(u.id, u) for u in users]
 
         self.fields["list"].choices = [
-            (l.id, l.name)
-            for l in self.fields["list"].queryset.filter(
+            (obj.id, obj.name)
+            for obj in self.fields["list"].queryset.filter(
                 Q(personal=None) | Q(personal=kwargs.get("request").user)
             )
         ]
 
 
 class EntryMixin(MultitenancyMixin):
-    def allow_delete(self, object=None, silent=True):
+    def allow_delete(self, object=None, *, silent=True):
         if object is None:
             return True
         if object.paid_by == self.request.user:
@@ -84,7 +84,7 @@ class EntryMixin(MultitenancyMixin):
 
     def get_queryset(self):
         return (
-            super(EntryMixin, self)
+            super()
             .get_queryset()
             .filter(Q(list__personal=None) | Q(list__personal=self.request.user.id))
         )
@@ -139,21 +139,21 @@ class EntryStatsView(resources.ModelResourceView):
         personal_table = []
         personal_sum = 0
 
-        for l in List.objects.filter(
+        for obj in List.objects.filter(
             Q(client=request.access.client_id),
             Q(personal=request.user.id) | Q(personal=None),
         ):
-            if l.personal_id:
-                personal_table.append([l, stats[l.id][l.personal_id]])
-                personal_sum += stats[l.id][l.personal_id]
+            if obj.personal_id:
+                personal_table.append([obj, stats[obj.id][obj.personal_id]])
+                personal_sum += stats[obj.id][obj.personal_id]
 
             else:
-                paid = stats[l.id]
+                paid = stats[obj.id]
                 if not len(paid):
                     continue
 
                 client_table.append(
-                    [l]
+                    [obj]
                     + [paid.get(user.id, 0) for user in users]
                     + [paid.get(request.user.id, 0) - sum(paid.values()) / len(users)]
                 )
