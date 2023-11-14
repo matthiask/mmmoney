@@ -111,3 +111,8 @@ if SECURE_SSL_REDIRECT:
     CSRF_COOKIE_SECURE = True
 else:
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+if not DEBUG:
+    STATICFILES_STORAGE = (
+        "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+    )
