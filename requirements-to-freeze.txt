@@ -1,7 +1,7 @@
+Django
 django-authlib
 django-canonical-domain
-Django<4.1
-gunicorn
+granian
 psycopg2-binary
 speckenv
 towel
