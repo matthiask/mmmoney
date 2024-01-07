@@ -25,3 +25,4 @@ urllib3==2.1.0
 uvloop==0.18.0
 watchfiles==0.21.0
 wheel==0.42.0
+whitenoise==6.6.0
