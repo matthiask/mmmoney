@@ -153,17 +153,26 @@ module.exports = (PRODUCTION) => {
         hot: true,
         port: 8000,
         allowedHosts: "all",
+        client: {
+          overlay: {
+            errors: true,
+            warnings: false,
+            runtimeErrors: true,
+          },
+        },
         devMiddleware: {
           headers: { "Access-Control-Allow-Origin": "*" },
           index: true,
           writeToDisk: (path) => /\.html$/.test(path),
         },
-        proxy: proxySettings
-          ? {
-              context: () => true,
-              target: `http://127.0.0.1:${proxySettings.backendPort}`,
-            }
-          : {},
+        proxy: [
+          proxySettings
+            ? {
+                context: () => true,
+                target: `http://127.0.0.1:${proxySettings.backendPort}`,
+              }
+            : {},
+        ],
       }
     },
     assetRule() {
@@ -191,7 +200,6 @@ module.exports = (PRODUCTION) => {
             options: {
               sassOptions: {
                 includePaths: [path.resolve(path.join(cwd, "node_modules"))],
-                quietDeps: true,
               },
             },
           },

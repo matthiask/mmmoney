@@ -5,10 +5,10 @@ from django import forms
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Q, Sum
+from django.forms.models import modelform_factory
 from django.shortcuts import redirect
 from django.utils.translation import gettext as _
 from towel import resources
-from towel.forms import towel_formfield_callback
 from towel.mt import AccessDecorator
 from towel.mt.forms import ModelForm, SearchForm
 from towel.resources.mt import MultitenancyMixin
@@ -24,13 +24,22 @@ class EntrySearchForm(SearchForm):
     pass
 
 
-class EntryForm(ModelForm):
-    formfield_callback = towel_formfield_callback
+class DateInput(forms.DateInput):
+    input_type = "date"
 
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        if isinstance(value, date):
+            context["widget"]["value"] = value.isoformat()
+        return context
+
+
+class EntryForm(ModelForm):
     class Meta:
         model = Entry
         exclude = ("client", "created", "currency")
         widgets = {
+            "date": DateInput,
             "paid_by": forms.RadioSelect,
             "list": forms.RadioSelect,
         }
@@ -38,12 +47,10 @@ class EntryForm(ModelForm):
     def __init__(self, *args, **kwargs):
         if not kwargs.get("instance"):
             request = kwargs.get("request")
-            kwargs.setdefault("initial", {}).update(
-                {
-                    "paid_by": request.user.id,
-                    "date": date.today().isoformat(),
-                }
-            )
+            kwargs.setdefault("initial", {}).update({
+                "paid_by": request.user.id,
+                "date": date.today().isoformat(),
+            })
 
         super().__init__(*args, **kwargs)
 
@@ -53,10 +60,7 @@ class EntryForm(ModelForm):
             .order_by("first_name", "last_name")
         )
 
-        self.fields["date"].widget = forms.DateInput(
-            attrs={"type": "date"},
-        )
-
+        self.fields["date"].widget.input_type = "date"
         self.fields["paid_by"].choices = [(u.id, u) for u in users]
 
         self.fields["list"].choices = [
@@ -87,6 +91,16 @@ class EntryMixin(MultitenancyMixin):
             super()
             .get_queryset()
             .filter(Q(list__personal=None) | Q(list__personal=self.request.user.id))
+        )
+
+    def get_form_class(self):
+        """
+        Returns the form class used in the view.
+        """
+        return modelform_factory(
+            self.model,
+            form=self.form_class,
+            fields="__all__",
         )
 
 
@@ -169,26 +183,24 @@ class EntryStatsView(resources.ModelResourceView):
 
         total_sum = [a + b for a, b in zip(until_last_year_sum, client_sum)]
 
-        return self.render_to_response(
-            {
-                "users": users,
-                "last_year_year": today.year - 1,
-                "this_year_year": today.year,
-                "until_last_year_sum": until_last_year_sum,
-                "client_table": client_table,
-                "client_sum": client_sum,
-                "total_sum": total_sum,
-                "personal_table": personal_table,
-                "personal_sum": personal_sum,
-                "personal_until_last_year_sum": Entry.objects.for_access(request.access)
-                .filter(list__personal=request.user, date__year__lt=today.year)
-                .aggregate(Sum("total"))["total__sum"]
-                or 0,
-                # 'thead': by_set,
-                # 'tbody': tbody,
-                # 'sumsum': sumsum,
-            }
-        )
+        return self.render_to_response({
+            "users": users,
+            "last_year_year": today.year - 1,
+            "this_year_year": today.year,
+            "until_last_year_sum": until_last_year_sum,
+            "client_table": client_table,
+            "client_sum": client_sum,
+            "total_sum": total_sum,
+            "personal_table": personal_table,
+            "personal_sum": personal_sum,
+            "personal_until_last_year_sum": Entry.objects.for_access(request.access)
+            .filter(list__personal=request.user, date__year__lt=today.year)
+            .aggregate(Sum("total"))["total__sum"]
+            or 0,
+            # 'thead': by_set,
+            # 'tbody': tbody,
+            # 'sumsum': sumsum,
+        })
 
 
 entry_url = resource_url_fn(
