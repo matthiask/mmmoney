@@ -8,4 +8,4 @@ RUN venv/bin/python manage.py collectstatic --noinput && rm .env
 RUN useradd -U -d /src deploy
 USER deploy
 EXPOSE 8000
-CMD ["venv/bin/granian", "--interface", "wsgi", "wsgi:application", "--workers", "2", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["venv/bin/granian", "--interface", "wsgi", "wsgi:application", "--workers", "2", "--host", "0.0.0.0", "--port", "8000", "--access-log"]
