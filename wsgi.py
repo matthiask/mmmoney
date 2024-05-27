@@ -21,13 +21,10 @@ class Middleware:
         self.application = application
 
     def __call__(self, environ, start_response):
-        iterable = None
-        try:
-            iterable = self.application(environ, start_response)
-            yield from iterable
-        finally:
-            if hasattr(iterable, "close"):
-                iterable.close()
+        iterable = self.application(environ, start_response)
+        yield from iterable
+
+        raise Exception  # not StopIteration
 
 
 application = Middleware(application)
