@@ -14,17 +14,3 @@ application = get_wsgi_application()
 application = WhiteNoise(application)
 # TODO immutable_file_test=r"\.[0-9a-f]{12,20}\..+$"
 application.add_files(BASE_DIR / "static", "/static/")
-
-
-class Middleware:
-    def __init__(self, application):
-        self.application = application
-
-    def __call__(self, environ, start_response):
-        iterable = self.application(environ, start_response)
-        yield from iterable
-
-        raise Exception  # not StopIteration
-
-
-application = Middleware(application)
