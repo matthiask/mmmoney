@@ -1,3 +1,4 @@
+blacknoise
 Django
 django-authlib
 django-canonical-domain
@@ -5,4 +6,3 @@ granian
 psycopg2-binary
 speckenv
 towel
-whitenoise
