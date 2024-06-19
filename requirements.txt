@@ -22,3 +22,4 @@ starlette==0.37.2
 towel==0.31.0
 urllib3==2.2.2
 uvloop==0.19.0
+whitenoise==6.6.0

@@ -6,3 +6,4 @@ granian
 psycopg2-binary
 speckenv
 towel
+whitenoise

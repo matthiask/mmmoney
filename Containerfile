@@ -10,4 +10,5 @@ RUN venv/bin/python -m blacknoise.compress static
 RUN useradd -U -d /src deploy
 USER deploy
 EXPOSE 8000
-CMD ["venv/bin/python", "-m", "granian", "--interface", "asgi", "asgi:application", "--workers", "2", "--host", "0.0.0.0", "--port", "8000", "--respawn-failed-workers"]
+# CMD ["venv/bin/python", "-m", "granian", "--interface", "asgi", "asgi:application", "--workers", "2", "--host", "0.0.0.0", "--port", "8000", "--respawn-failed-workers"]
+CMD ["venv/bin/granian", "--interface", "wsgi", "wsgi:application", "--host", "0.0.0.0", "--port", "8000", "--access-log"]
