@@ -24,7 +24,7 @@
   <tr>
     {% for cell in row %}
       {% if forloop.first %}
-        <th>{{ cell }}</th>
+        <th><a href="{% url 'mmmoney_entry_list' %}?list={{ cell.pk }}">{{ cell }}</a></th>
       {% else %}
         <td>{{ cell|stringformat:".2f" }}</td>
       {% endif %}
