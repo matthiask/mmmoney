@@ -162,6 +162,10 @@ button,
   background: #e8e8ea;
 }
 
+.table td a {
+  text-decoration: none;
+}
+
 .entries td:nth-child(3n),
 .stats tr > *:nth-child(n + 2) {
   text-align: right;
