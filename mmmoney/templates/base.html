@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" >
-{% load i18n mark_current static towel_form_tags %}
+{% load i18n markcurrent static towel_form_tags %}
 
 <head>
   <meta charset="utf-8" />
@@ -17,13 +17,13 @@
     {% block navigation %}
       {% if request.user.is_authenticated %}
         <nav>
-          {% mark_current request.path %}
-          <a href="{% url 'mmmoney_entry_add' %}">{% trans "Add" %}</a>
-          <a href="{% url 'mmmoney_entry_stats' %}">{% trans "Stats" %}</a>
-          {% endmark_current %}
+          {% markcurrent request.path %}
+          <a href="{% url 'mmmoney_entry_add' %}">{% translate "Add" %}</a>
+          <a href="{% url 'mmmoney_entry_stats' %}">{% translate "Stats" %}</a>
+          {% endmarkcurrent %}
         </nav>
       {% endif %}
-    {% endblock %}
+    {% endblock navigation %}
   </nav>
 
 
@@ -43,7 +43,7 @@
                 {% if search_form.searching %}
                 {% with total=view.get_queryset.count %}
                 {% if total and paginator.count != total %}
-                  (<a href="?clear=1">{% blocktrans %}{{ total }} total{% endblocktrans %}</a>)
+                  (<a href="?clear=1">{% blocktranslate %}{{ total }} total{% endblocktranslate %}</a>)
                 {% endif %}
                 {% endwith %}
                 {% endif %}
@@ -65,8 +65,8 @@
 
   <div class="row">
     <nav>
-      <a href="{% url 'password_change' %}">{% trans "Password" %}</a>
-      <a href="{% url 'logout' %}">{% trans "Sign Out" %}</a>
+      <a href="{% url 'password_change' %}">{% translate "Password" %}</a>
+      <a href="{% url 'logout' %}">{% translate "Sign Out" %}</a>
     </nav>
   </div>
 

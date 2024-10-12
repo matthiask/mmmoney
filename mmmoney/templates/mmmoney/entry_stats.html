@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% load i18n mark_current %}
+{% load i18n %}
 
 {% block title %}Stats - {{ block.super }}{% endblock %}
 
 {% block content %}
-<h1>{% trans "Stats" %}</h1>
+<h1>{% translate "Stats" %}</h1>
 
-<h2>{% trans "Team" %}</h2>
+<h2>{% translate "Team" %}</h2>
 
 <table class="table stats">
 <thead>
@@ -16,7 +16,7 @@
         {% for user in users %}
             <th>{{ user }}</th>
         {% endfor %}
-        <th>{% trans "My delta" %}</th>
+        <th>{% translate "My delta" %}</th>
     </tr>
 </thead>
 <tbody>
@@ -34,7 +34,7 @@
 </tbody>
 <tfoot>
   <tr>
-    <th>{% trans "Sum" %} {{ this_year_year }}</th>
+    <th>{% translate "Sum" %} {{ this_year_year }}</th>
     {% for cell in client_sum %}
       <td>{{ cell|stringformat:".2f" }}</td>
     {% endfor %}
@@ -46,7 +46,7 @@
     {% endfor %}
   </tr>
   <tr>
-    <th>{% trans "Total" %}</th>
+    <th>{% translate "Total" %}</th>
     {% for cell in total_sum %}
       <td>{{ cell|stringformat:".2f" }}</td>
     {% endfor %}
@@ -54,12 +54,12 @@
 </tfoot>
 </table>
 
-<h2>{% trans "Personal" %}</h2>
+<h2>{% translate "Personal" %}</h2>
 <table class="table stats">
 <thead>
   <tr>
-    <th>{% trans "List" %}</th>
-    <th>{% trans "Total" %}</th>
+    <th>{% translate "List" %}</th>
+    <th>{% translate "Total" %}</th>
   </tr>
 </thead>
 <tbody>
@@ -72,7 +72,7 @@
 </tbody>
 <tfoot>
   <tr>
-    <th>{% trans "Sum" %}</th>
+    <th>{% translate "Sum" %}</th>
     <td>{{ personal_sum|stringformat:".2f" }}</td>
   </tr>
   <tr>
@@ -80,9 +80,9 @@
     <td>{{ personal_until_last_year_sum|stringformat:".2f" }}</td>
   </tr>
   <tr>
-    <th>{% trans "Total" %}</th>
+    <th>{% translate "Total" %}</th>
     <td>{{ personal_sum|add:personal_until_last_year_sum|stringformat:".2f" }}</td>
   </tr>
 </tfoot>
 </table>
-{% endblock %}
+{% endblock content %}

@@ -10,17 +10,17 @@ class_matcher = re.compile('(class="[^"]+)(")')
 tag_matcher = re.compile(r"<([a-z0-9]+)([ >])")
 
 
-def mark_current(navigation, current):
+def markcurrent(navigation, current):
     """
     searches for links and marks the links 'active' (add the class "active")
     depending on the request.path.
 
     usage::
 
-        {% mark_current request.path %}
+        {% markcurrent request.path %}
           <li><a href="/">Home</a></li>
           <li><a href="/products/">Products</a></li>
-        {% endmark_current %}
+        {% endmarkcurrent %}
 
     resulting in (assuming request.path == '/products/')::
 
@@ -59,15 +59,15 @@ def mark_current(navigation, current):
     return "\n".join(out)
 
 
-def do_mark_current(parser, token):
+def do_markcurrent(parser, token):
     try:
-        tag_name, url_variable = token.split_contents()
-    except ValueError:
+        _tag_name, url_variable = token.split_contents()
+    except ValueError as exc:
         raise template.TemplateSyntaxError(
             "%r tag requires one argument" % token.contents.split()[0]
-        )
+        ) from exc
 
-    nodelist = parser.parse(("endmark_current",))
+    nodelist = parser.parse(("endmarkcurrent",))
     parser.delete_first_token()
     return MarkCurrentNode(nodelist, url_variable)
 
@@ -79,7 +79,7 @@ class MarkCurrentNode(template.Node):
 
     def render(self, context):
         output = self.nodelist.render(context)
-        return mark_current(output, self.url_variable.resolve(context))
+        return markcurrent(output, self.url_variable.resolve(context))
 
 
-register.tag("mark_current", do_mark_current)
+register.tag("markcurrent", do_markcurrent)

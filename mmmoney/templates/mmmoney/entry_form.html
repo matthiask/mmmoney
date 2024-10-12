@@ -10,7 +10,7 @@
   {% else %}{{ title }}
   {% endif %}
 </h1>
-{% endblock %}
+{% endblock page-header %}
 
 {% block content %}
 <form method="post" action="{{ request.get_full_path|default:"." }}"
@@ -27,12 +27,12 @@
 </fieldset>
 
 <div class="form-actions">
-    <button class="button" type="submit">{% trans "save"|capfirst %}</button>
+    <button class="button" type="submit">{% translate "save"|capfirst %}</button>
 
     {% if object %}
-    <a href="{{ object.urls.delete }}" class="button alert right">{% trans "delete"|capfirst %}</a>
+    <a href="{{ object.urls.delete }}" class="button alert right">{% translate "delete"|capfirst %}</a>
     {% endif %}
 </div>
 
 </form>
-{% endblock %}
+{% endblock content %}

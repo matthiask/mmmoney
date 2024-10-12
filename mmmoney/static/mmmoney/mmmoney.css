@@ -46,6 +46,9 @@ nav {
 .row {
   padding: 8px;
   position: relative;
+  max-width: 56rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 fieldset {
