@@ -21,7 +21,7 @@ access = AccessDecorator()
 
 
 class EntrySearchForm(SearchForm):
-    pass
+    list = forms.ModelChoiceField(List.objects.all(), label="", required=False)
 
 
 class DateInput(forms.DateInput):
