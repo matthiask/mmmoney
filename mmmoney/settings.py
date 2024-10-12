@@ -27,6 +27,7 @@ SECRET_KEY = env("SECRET_KEY", required=True)
 
 TIME_ZONE = "Europe/Zurich"
 LANGUAGE_CODE = "de-ch"
+LANGUAGES = [("de", "German")]
 SITE_ID = 1
 USE_I18N = True
 USE_TZ = True
@@ -48,6 +49,7 @@ MIDDLEWARE = (
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "towel.mt.middleware.LazyAccessMiddleware",
 )
 

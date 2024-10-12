@@ -142,13 +142,22 @@ button,
 
 .table {
   width: 100%;
+  overflow-x: scroll;
 }
+
+.table tr > :nth-child(1) {
+  position: sticky;
+  left: 0;
+}
+
 .table td,
 .table th {
   vertical-align: top;
   text-align: left;
   padding: 4px;
+  white-space: nowrap;
 }
+
 .table tr:nth-child(odd) {
   background: #e8e8ea;
 }

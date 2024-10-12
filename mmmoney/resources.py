@@ -22,6 +22,7 @@ access = AccessDecorator()
 
 class EntrySearchForm(SearchForm):
     list = forms.ModelChoiceField(List.objects.all(), label="", required=False)
+    date__year = forms.IntegerField(label="", required=False, widget=forms.HiddenInput)
 
 
 class DateInput(forms.DateInput):
@@ -137,12 +138,26 @@ class EntryStatsView(resources.ModelResourceView):
                 .annotate(Sum("total"))
             )
         }
+        list_stats_until_last_years_end = {
+            (row["list"], row["date__year"]): row["total__sum"]
+            for row in (
+                Entry.objects.for_access(request.access)
+                .order_by()
+                .filter(date__year__lt=today.year, list__personal=None)
+                .values("list", "date__year")
+                .annotate(Sum("total"))
+            )
+        }
         this_year = (
             Entry.objects.for_access(request.access)
             .order_by()
             .filter(date__year=today.year)
             .values("paid_by", "list")
             .annotate(Sum("total"))
+        )
+
+        years = sorted(
+            {key[1] for key in list_stats_until_last_years_end}, reverse=True
         )
 
         stats = defaultdict(lambda: defaultdict(int))
@@ -152,6 +167,8 @@ class EntryStatsView(resources.ModelResourceView):
         client_table = []
         personal_table = []
         personal_sum = 0
+
+        list_table = []
 
         for obj in List.objects.filter(
             Q(client=request.access.client_id),
@@ -172,6 +189,14 @@ class EntryStatsView(resources.ModelResourceView):
                     + [paid.get(request.user.id, 0) - sum(paid.values()) / len(users)]
                 )
 
+                list_table.append([
+                    obj,
+                    *(
+                        (list_stats_until_last_years_end.get((obj.pk, year), 0), year)
+                        for year in years
+                    ),
+                ])
+
         until_last_year_sum = [
             until_last_years_end.get(user.id, 0) for user in users
         ] + [
@@ -191,6 +216,8 @@ class EntryStatsView(resources.ModelResourceView):
             "client_table": client_table,
             "client_sum": client_sum,
             "total_sum": total_sum,
+            "years": years,
+            "list_table": list_table,
             "personal_table": personal_table,
             "personal_sum": personal_sum,
             "personal_until_last_year_sum": Entry.objects.for_access(request.access)

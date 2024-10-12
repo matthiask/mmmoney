@@ -24,7 +24,7 @@
   <tr>
     {% for cell in row %}
       {% if forloop.first %}
-        <th><a href="{% url 'mmmoney_entry_list' %}?list={{ cell.pk }}">{{ cell }}</a></th>
+        <th><a href="{% url 'mmmoney_entry_list' %}?list={{ cell.pk }}&amp;date__year={{ this_year_year }}">{{ cell }}</a></th>
       {% else %}
         <td>{{ cell|stringformat:".2f" }}</td>
       {% endif %}
@@ -52,6 +52,29 @@
     {% endfor %}
   </tr>
 </tfoot>
+</table>
+
+<h2>{% translate "Lists over the years" %}</h2>
+<table class="table stats">
+  <thead>
+    <tr>
+      <th></th>
+      {% for year in years %}<th>{{ year }}</th>{% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for list in list_table %}
+    <tr>
+      {% for cell in list %}
+      {% if forloop.first %}
+        <th><a href="{% url 'mmmoney_entry_list' %}?list={{ cell.pk }}">{{ cell }}</a></th>
+      {% else %}
+        <td><a href="{% url 'mmmoney_entry_list' %}?list={{ list.0.pk }}&amp;date__year={{ cell.1 }}">{{ cell.0|stringformat:".2f" }}</a></td>
+      {% endif %}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 
 <h2>{% translate "Personal" %}</h2>
