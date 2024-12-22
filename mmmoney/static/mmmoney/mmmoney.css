@@ -150,12 +150,18 @@ button,
   left: 0;
 }
 
+.stats tr:nth-child(even) > :nth-child(1) {
+  background: #fff;
+}
+.stats tr:nth-child(odd) > :nth-child(1) {
+  background: #e8e8ea;
+}
+
 .table td,
 .table th {
   vertical-align: top;
   text-align: left;
   padding: 4px;
-  white-space: nowrap;
 }
 
 .table tr:nth-child(odd) {
