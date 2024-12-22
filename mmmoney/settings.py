@@ -114,7 +114,8 @@ if SECURE_SSL_REDIRECT:
 else:
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-if not DEBUG:
-    STATICFILES_STORAGE = (
-        "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-    )
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+    },
+}
