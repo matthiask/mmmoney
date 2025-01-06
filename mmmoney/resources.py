@@ -179,6 +179,14 @@ class EntryStatsView(resources.ModelResourceView):
                 personal_sum += stats[obj.id][obj.personal_id]
 
             else:
+                list_table.append([
+                    obj,
+                    *(
+                        (list_stats_until_last_years_end.get((obj.pk, year), 0), year)
+                        for year in years
+                    ),
+                ])
+
                 paid = stats[obj.id]
                 if not len(paid):
                     continue
@@ -188,14 +196,6 @@ class EntryStatsView(resources.ModelResourceView):
                     + [paid.get(user.id, 0) for user in users]
                     + [paid.get(request.user.id, 0) - sum(paid.values()) / len(users)]
                 )
-
-                list_table.append([
-                    obj,
-                    *(
-                        (list_stats_until_last_years_end.get((obj.pk, year), 0), year)
-                        for year in years
-                    ),
-                ])
 
         until_last_year_sum = [
             until_last_years_end.get(user.id, 0) for user in users

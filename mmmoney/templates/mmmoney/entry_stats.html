@@ -77,6 +77,7 @@
   </tbody>
 </table>
 
+{% if personal_table %}
 <h2>{% translate "Personal" %}</h2>
 <table class="table stats">
 <thead>
@@ -108,4 +109,6 @@
   </tr>
 </tfoot>
 </table>
+{% endif %}
+
 {% endblock content %}
