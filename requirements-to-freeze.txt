@@ -3,7 +3,6 @@ Django
 django-authlib
 django-canonical-domain
 granian
-psycopg2-binary
+psycopg[binary]
 speckenv
 towel
-whitenoise
