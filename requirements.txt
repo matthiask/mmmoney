@@ -9,7 +9,7 @@ click==8.1.8
 django==5.2b1
 django-authlib==0.17.2
 django-canonical-domain==0.11.0
-granian==2.0.0
+granian==2.0.1
 idna==3.10
 oauthlib==3.2.2
 psycopg2-binary==2.9.10
