@@ -56,7 +56,8 @@ class EntryForm(ModelForm):
         super().__init__(*args, **kwargs)
 
         users = (
-            User.objects.for_access(self.request.access)
+            User.objects
+            .for_access(self.request.access)
             .filter(is_active=True)
             .order_by("first_name", "last_name")
         )
@@ -131,7 +132,8 @@ class EntryStatsView(resources.ModelResourceView):
         until_last_years_end = {
             row["paid_by"]: row["total__sum"]
             for row in (
-                Entry.objects.for_access(request.access)
+                Entry.objects
+                .for_access(request.access)
                 .order_by()
                 .filter(date__year__lt=today.year, list__personal=None)
                 .values("paid_by")
@@ -141,7 +143,8 @@ class EntryStatsView(resources.ModelResourceView):
         list_stats_until_last_years_end = {
             (row["list"], row["date__year"]): row["total__sum"]
             for row in (
-                Entry.objects.for_access(request.access)
+                Entry.objects
+                .for_access(request.access)
                 .order_by()
                 .filter(date__year__lt=today.year, list__personal=None)
                 .values("list", "date__year")
@@ -149,7 +152,8 @@ class EntryStatsView(resources.ModelResourceView):
             )
         }
         this_year = (
-            Entry.objects.for_access(request.access)
+            Entry.objects
+            .for_access(request.access)
             .order_by()
             .filter(date__year=today.year)
             .values("paid_by", "list")
@@ -220,7 +224,8 @@ class EntryStatsView(resources.ModelResourceView):
             "list_table": list_table,
             "personal_table": personal_table,
             "personal_sum": personal_sum,
-            "personal_until_last_year_sum": Entry.objects.for_access(request.access)
+            "personal_until_last_year_sum": Entry.objects
+            .for_access(request.access)
             .filter(list__personal=request.user, date__year__lt=today.year)
             .aggregate(Sum("total"))["total__sum"]
             or 0,

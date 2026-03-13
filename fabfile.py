@@ -1,7 +1,7 @@
 import fh_fablib as fl
 
 
-fl.require("1.0.20250623")
+fl.require("1.0.20260311")
 fl.config.update(
     app="mmmoney",
     host="www-data@feinheit06.nine.ch",
