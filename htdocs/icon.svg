@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="80" fill="#1d4ed8"/>
+
+  <!-- House: chimney -->
+  <rect x="318" y="108" width="52" height="90" rx="6" fill="white"/>
+
+  <!-- House: roof -->
+  <polygon points="256,72 436,236 76,236" fill="white"/>
+
+  <!-- House: walls -->
+  <rect x="104" y="226" width="304" height="210" rx="8" fill="white"/>
+
+  <!-- House: left window -->
+  <rect x="130" y="268" width="72" height="64" rx="8" fill="#1d4ed8"/>
+
+  <!-- House: right window -->
+  <rect x="310" y="268" width="72" height="64" rx="8" fill="#1d4ed8"/>
+
+  <!-- House: door -->
+  <rect x="212" y="316" width="88" height="120" rx="10" fill="#1d4ed8"/>
+
+  <!-- Scattered coins (face-on circles in a casual pile) -->
+  <!-- Back-left coin -->
+  <circle cx="318" cy="400" r="64" fill="#b45309"/>
+  <circle cx="318" cy="400" r="56" fill="#f59e0b"/>
+  <circle cx="318" cy="400" r="40" fill="#fbbf24"/>
+
+  <!-- Back-right coin, slightly higher -->
+  <circle cx="408" cy="378" r="60" fill="#b45309"/>
+  <circle cx="408" cy="378" r="52" fill="#f59e0b"/>
+  <circle cx="408" cy="378" r="37" fill="#fbbf24"/>
+
+  <!-- Front coin, overlapping both -->
+  <circle cx="362" cy="442" r="68" fill="#b45309"/>
+  <circle cx="362" cy="442" r="60" fill="#f59e0b"/>
+  <circle cx="362" cy="442" r="44" fill="#fbbf24"/>
+</svg>
