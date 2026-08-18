@@ -17,7 +17,7 @@ psycopg-binary==3.3.3
 requests==2.32.5
 requests-oauthlib==2.0.0
 speckenv==6.2
-sqlparse==0.5.5
+sqlparse==0.6.0
 starlette==1.0.0rc1
 towel==0.31.0
 typing-extensions==4.15.0
