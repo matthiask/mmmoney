@@ -21,4 +21,4 @@ sqlparse==0.6.0
 starlette==1.6.0
 towel==0.31.0
 typing-extensions==4.16.0
-urllib3==2.7.0
+urllib3==2.8.0
