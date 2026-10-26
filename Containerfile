@@ -7,8 +7,7 @@ RUN pip install uv && uv pip install -r requirements.txt --system
 ADD . /src
 COPY conf/_env .env
 RUN python manage.py collectstatic --noinput && rm .env
-RUN python -m blacknoise.compress static
 RUN useradd -U -d /src deploy
 USER deploy
 EXPOSE 8000
-CMD ["python", "-m", "granian", "--interface", "asgi", "asgi:application", "--workers", "2", "--host", "0.0.0.0", "--port", "8000", "--respawn-failed-workers"]
+CMD ["python", "-m", "granian", "--interface", "asgi", "asgi:application", "--workers", "2", "--host", "0.0.0.0", "--port", "8000", "--respawn-failed-workers", "--static-path-mount", "/src/static/", "--static-path-expires", "720d", "--no-ws"]

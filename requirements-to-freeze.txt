@@ -1,4 +1,3 @@
-blacknoise
 Django
 django-authlib
 django-canonical-domain
